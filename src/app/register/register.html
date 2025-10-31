@@ -1,0 +1,9 @@
+<form (ngSubmit)="onSubmit()" class="form-container">
+  <label for="username">Nome:</label>
+  <input type="text" [(ngModel)]="username" name="username" required />
+  <label for="email">Email:</label>
+  <input type="email" [(ngModel)]="email" name="email" required readonly />
+  <label for="password">Password:</label>
+  <input type="password" [(ngModel)]="password" name="password" required />
+  <button type="submit">Registrati</button>
+</form>

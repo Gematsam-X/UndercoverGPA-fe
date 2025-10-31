@@ -2,41 +2,41 @@
    🎨 Stile generale dell'app
    =============================== */
 :root {
-	--primary-color: #4f46e5; /* viola-blu elegante */
-	--accent-color: #22d3ee; /* azzurro acceso */
-	--background-color: #f8fafc;
-	--card-bg: #ffffff;
-	--text-color: #1e293b;
-	--border-radius: 14px;
-	--shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-	--transition: all 0.3s ease;
+  --primary-color: #4f46e5; /* viola-blu elegante */
+  --accent-color: #22d3ee; /* azzurro acceso */
+  --background-color: #f8fafc;
+  --card-bg: #ffffff;
+  --text-color: #1e293b;
+  --border-radius: 14px;
+  --shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  --transition: all 0.3s ease;
 }
 
 html,
 body {
-	height: 100%;
-	margin: 0;
-	font-family: 'Poppins', 'Segoe UI', sans-serif;
-	background: var(--background-color);
-	color: var(--text-color);
+  height: 100%;
+  margin: 0;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  background: var(--background-color);
+  color: var(--text-color);
 }
 
 /* ===============================
    🔹 Contenitori principali
    =============================== */
 .app-container {
-	max-width: 900px;
-	margin: 50px auto;
-	padding: 2rem;
-	background: var(--card-bg);
-	border-radius: var(--border-radius);
-	box-shadow: var(--shadow);
-	transition: var(--transition);
+  max-width: 900px;
+  margin: 50px auto;
+  padding: 2rem;
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  transition: var(--transition);
 }
 
 .app-container:hover {
-	transform: translateY(-2px);
-	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
 
 /* ===============================
@@ -45,19 +45,19 @@ body {
 h1,
 h2,
 h3 {
-	font-weight: 600;
-	color: var(--primary-color);
-	letter-spacing: 0.5px;
+  font-weight: 600;
+  color: var(--primary-color);
+  letter-spacing: 0.5px;
 }
 
 h1 {
-	font-size: 2.3rem;
-	margin-bottom: 1rem;
+  font-size: 2.3rem;
+  margin-bottom: 1rem;
 }
 
 h2 {
-	font-size: 1.7rem;
-	margin-bottom: 0.75rem;
+  font-size: 1.7rem;
+  margin-bottom: 0.75rem;
 }
 
 /* ===============================
@@ -65,22 +65,22 @@ h2 {
    =============================== */
 button,
 .btn {
-	background: var(--primary-color);
-	color: white;
-	border: none;
-	border-radius: var(--border-radius);
-	padding: 0.7rem 1.4rem;
-	font-size: 1rem;
-	cursor: pointer;
-	transition: var(--transition);
-	font-weight: 500;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.7rem 1.4rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 500;
 }
 
 button:hover,
 .btn:hover {
-	background: var(--accent-color);
-	transform: scale(1.05);
-	box-shadow: var(--shadow);
+  background: var(--accent-color);
+  transform: scale(1.05);
+  box-shadow: var(--shadow);
 }
 
 /* ===============================
@@ -89,97 +89,98 @@ button:hover,
 input,
 select,
 textarea {
-	width: 100%;
-	padding: 0.75rem;
-	border-radius: var(--border-radius);
-	border: 2px solid #e2e8f0;
-	font-size: 1rem;
-	margin-bottom: 1rem;
-	transition: var(--transition);
-	background-color: white;
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: var(--border-radius);
+  border: 2px solid #e2e8f0;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  transition: var(--transition);
+  background-color: white;
 }
 
 input:focus,
 select:focus,
 textarea:focus {
-	border-color: var(--primary-color);
-	outline: none;
-	box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
 }
 
 /* ===============================
    🧱 Card e box
    =============================== */
 .card {
-	background: var(--card-bg);
-	border-radius: var(--border-radius);
-	box-shadow: var(--shadow);
-	padding: 1.5rem;
-	margin-bottom: 1.5rem;
-	transition: var(--transition);
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  transition: var(--transition);
 }
 
 .card:hover {
-	transform: translateY(-3px);
-	box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
 }
 
 /* ===============================
    🌀 Animazioni semplici
    =============================== */
 @keyframes fadeInUp {
-	from {
-		opacity: 0;
-		transform: translateY(10px);
-	}
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .fade-in {
-	animation: fadeInUp 0.4s ease forwards;
+  animation: fadeInUp 0.4s ease forwards;
 }
 
 /* ===============================
    📱 Responsività
    =============================== */
 @media (max-width: 768px) {
-	.app-container {
-		margin: 20px;
-		padding: 1rem;
-	}
+  .app-container {
+    margin: 20px;
+    padding: 1rem;
+  }
 
-	h1 {
-		font-size: 1.8rem;
-	}
+  h1 {
+    font-size: 1.8rem;
+  }
 }
 
-.email-found-container, .form-container {
-	max-width: 400px;
-	margin: 2rem auto;
-	padding: 2rem;
-	border: 1px solid #ccc;
-	border-radius: 10px;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.email-found-container,
+.form-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 input {
-	width: 100%;
-	padding: 0.5rem;
-	margin-top: 0.5rem;
-	margin-bottom: 1rem;
-	border-radius: 5px;
-	border: 1px solid #aaa;
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+  border: 1px solid #aaa;
 }
 button {
-	padding: 0.5rem 1rem;
-	border: none;
-	border-radius: 5px;
-	background-color: #5a67d8;
-	color: white;
-	cursor: pointer;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  background-color: #5a67d8;
+  color: white;
+  cursor: pointer;
 }
 button:hover {
-	background-color: #434190;
+  background-color: #434190;
 }

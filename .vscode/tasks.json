@@ -1,42 +1,20 @@
 {
-  // For more information, visit: https://go.microsoft.com/fwlink/?LinkId=733558
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
   "version": "2.0.0",
   "tasks": [
     {
-      "type": "npm",
-      "script": "start",
-      "isBackground": true,
-      "problemMatcher": {
-        "owner": "typescript",
-        "pattern": "$tsc",
-        "background": {
-          "activeOnStart": true,
-          "beginsPattern": {
-            "regexp": "(.*?)"
-          },
-          "endsPattern": {
-            "regexp": "bundle generation complete"
-          }
-        }
-      }
+      "label": "Auto git pull",
+      "type": "shell",
+      "command": "git pull",
+      "runOptions": { "runOn": "folderOpen" }
     },
     {
       "type": "npm",
-      "script": "test",
-      "isBackground": true,
-      "problemMatcher": {
-        "owner": "typescript",
-        "pattern": "$tsc",
-        "background": {
-          "activeOnStart": true,
-          "beginsPattern": {
-            "regexp": "(.*?)"
-          },
-          "endsPattern": {
-            "regexp": "bundle generation complete"
-          }
-        }
-      }
+      "script": "start",
+      "problemMatcher": [],
+      "label": "Auto start",
+      "detail": "ng serve",
     }
   ]
 }

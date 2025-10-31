@@ -1,0 +1,10 @@
+<div class="email-found-container">
+  <h2>Login per {{ email }}</h2>
+  <form (ngSubmit)="onLogin()">
+    <div>
+      <label>Password:</label>
+      <input type="password" [(ngModel)]="password" name="password" required />
+    </div>
+    <button type="submit">Accedi</button>
+  </form>
+</div>
