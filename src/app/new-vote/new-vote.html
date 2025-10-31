@@ -55,7 +55,7 @@
   <p class="feedback" [style.color]="voteMessageColor">{{ voteMessage }}</p>
 
   <!-- ===== PULSANTE INVIO ===== -->
-  <button id="submitvote" (click)="submitVote()" [disabled]="isSubmitting">
+  <button id="submitvote" (click)="handleButtonClick()" [disabled]="isSubmitting">
     {{ buttonLabel }}
   </button>
 </div>

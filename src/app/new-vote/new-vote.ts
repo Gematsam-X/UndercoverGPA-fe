@@ -64,7 +64,7 @@ export class NewVote {
     "Arte",
     "Musica",
   ];
-  selectedSubject: string | null = null; // solo dropdown
+  selectedSubject: string | null = null; // dropdown
   customSubject: string | null = null; // input personalizzato
 
   // ===== tipo di prova =====
@@ -76,31 +76,40 @@ export class NewVote {
   isSubmitting = false;
   buttonLabel = "Invia voto";
 
-  // ---- dropdown -> reset custom input ----
+  // ===== gestione dropdown / custom =====
   onDropdownChange() {
     this.customVote = null;
     this.voteMessage = "";
   }
 
-  // ---- custom vote -> reset dropdown ----
   onCustomVoteChange() {
     this.selectedVote = null;
     this.voteMessage = "";
   }
 
-  // ---- subject dropdown change handler ----
   onSubjectChange() {
-    this.customSubject = null; // reset input
+    this.customSubject = null;
     this.voteMessage = "";
   }
 
-  // ---- custom subject input ----
   onCustomSubjectChange() {
-    this.selectedSubject = null; // reset select
+    this.selectedSubject = null;
     this.voteMessage = "";
   }
 
-  // ---- submit ----
+  // ===== reset totale form =====
+  resetForm() {
+    this.selectedVote = null;
+    this.customVote = null;
+    this.selectedSubject = null;
+    this.customSubject = null;
+    this.selectedExamType = null;
+    this.voteMessage = "";
+    this.voteMessageColor = "var(--primary-color)";
+    this.buttonLabel = "Invia voto";
+  }
+
+  // ===== submit voto =====
   submitVote() {
     this.voteMessage = "";
     this.voteMessageColor = "var(--primary-color)";
@@ -164,14 +173,9 @@ export class NewVote {
       next: () => {
         this.voteMessage = `✅ Voto "${payload.label}" per ${payload.subject} (${payload.examType}) inviato!`;
         this.voteMessageColor = "green";
-
-        this.selectedVote = null;
-        this.customVote = null;
-        this.selectedSubject = null;
-        this.customSubject = null;
-        this.selectedExamType = null;
-
         this.isSubmitting = false;
+
+        // Cambia il pulsante per resettare al prossimo click
         this.buttonLabel = "Invia un altro voto";
       },
       error: (err) => {
@@ -182,5 +186,13 @@ export class NewVote {
         this.buttonLabel = "Invia voto";
       },
     });
+  }
+  
+  handleButtonClick() {
+    if (this.buttonLabel === "Invia voto") {
+      this.submitVote();
+    } else if (this.buttonLabel === "Invia un altro voto") {
+      this.resetForm();
+    }
   }
 }

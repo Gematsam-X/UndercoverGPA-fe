@@ -35,7 +35,6 @@ export class EmailFound implements OnInit {
       .post<{
         message: string;
         accessToken: string;
-        refreshToken: string;
         username: string;
       }>('http://localhost:3000/api/auth/login', {
         email: this.email,
@@ -45,7 +44,6 @@ export class EmailFound implements OnInit {
         next: (res) => {
           // Salviamo
           localStorage.setItem('accessToken', res.accessToken);
-          localStorage.setItem('refreshToken', res.refreshToken);
           localStorage.setItem('username', res.username);
 
           alert(res.message + ' 👌 Benvenuto ' + res.username);

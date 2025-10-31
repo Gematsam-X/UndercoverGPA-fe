@@ -20,7 +20,6 @@ export class Homepage {
 
   logout() {
     localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
     localStorage.removeItem('username');
     localStorage.removeItem('userEmail');
     this.router.navigate(['login']);
