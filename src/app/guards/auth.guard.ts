@@ -1,46 +1,63 @@
-import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
-import { jwtDecode } from 'jwt-decode';
+import { inject } from "@angular/core";
+import { CanActivateFn, Router } from "@angular/router";
+import { HttpClient } from "@angular/common/http";
+import { jwtDecode } from "jwt-decode";
+import { firstValueFrom } from "rxjs";
 
-/**
- * Route Guard per proteggere le rotte con autenticazione JWT.
- * Controlla se il token è presente e valido; altrimenti reindirizza a login.
- */
-export const authGuard: CanActivateFn = (route, state) => {
+interface JWTPayload {
+	exp: number;
+	iat: number;
+}
+
+export const authGuard: CanActivateFn = async (route, state) => {
 	const router = inject(Router);
-	const accessToken = localStorage.getItem('accessToken');
+	const http = inject(HttpClient);
+	const accessToken = localStorage.getItem("accessToken");
 
-	// 1. Nessun token → login
+	// 🧩 1️⃣ Se non c’è token → login
 	if (!accessToken) {
-		router.navigate(['login']);
+		router.navigate(["login"]);
 		return false;
 	}
+
+	let payload: JWTPayload | null = null;
 
 	try {
-		// 2. Decodifica token
-		const decoded: any = jwtDecode(accessToken);
-		const now = Math.floor(Date.now() / 1000);
+		// 🕵️‍♂️ 2️⃣ Decodifica token (potrebbe lanciare errore)
+		payload = jwtDecode<JWTPayload>(accessToken);
+	} catch {
+		console.warn("⚠️ Token corrotto o non decodificabile. Provo refresh...");
+	}
 
-		// 3. Controlla scadenza
-		if (decoded.exp < now) {
-			console.warn('⚠️ Token scaduto, reindirizzo al login.');
-			localStorage.removeItem('accessToken');
-			localStorage.removeItem('refreshToken');
-			localStorage.removeItem('username');
-			localStorage.removeItem('userEmail');
-			router.navigate(['login']);
+	const now = Date.now() / 1000;
+	const exp = payload?.exp ?? 0;
+
+	// ⚠️ 3️⃣ Token scaduto o invalido → tentativo di refresh
+	if (!payload || exp < now - 5) {
+		console.warn("⚠️ AccessToken scaduto. Tentativo di refresh...");
+
+		try {
+			// 🔄 4️⃣ Richiedi nuovo accessToken usando il refreshToken nel cookie
+			const res: any = await firstValueFrom(
+				http.post("http://localhost:3000/api/auth/token", {}, { withCredentials: true })
+			);
+
+			// ✅ 5️⃣ Se il server risponde con un nuovo accessToken → salvalo
+			if (res?.accessToken) {
+				localStorage.setItem("accessToken", res.accessToken);
+				console.log("✅ AccessToken aggiornato con successo!");
+				return true;
+			} else {
+				throw new Error("Refresh token non valido o assente.");
+			}
+		} catch (refreshError) {
+			console.error("❌ Errore durante il refresh:", refreshError);
+			localStorage.removeItem("accessToken");
+			router.navigate(["login"]);
 			return false;
 		}
-
-		// Token valido
-		return true;
-	} catch (err) {
-		console.error('❌ Token non valido:', err);
-		localStorage.removeItem('accessToken');
-		localStorage.removeItem('refreshToken');
-		localStorage.removeItem('username');
-		localStorage.removeItem('userEmail');
-		router.navigate(['login']);
-		return false;
 	}
+
+	// 💪 6️⃣ Token ancora valido → accesso consentito
+	return true;
 };
