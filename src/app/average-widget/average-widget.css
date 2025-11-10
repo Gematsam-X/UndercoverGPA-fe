@@ -1,0 +1,42 @@
+.avg-circle {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 2rem;
+  border-radius: 50%;
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.avg-value {
+  font-size: 3.5rem;
+  font-weight: bold;
+}
+
+.avg-label {
+  margin-top: 0.25rem;
+  font-size: 1rem;
+  color: #444;
+}
+
+.animate-pop {
+  animation: popIn 0.6s ease;
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  80% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

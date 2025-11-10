@@ -1,33 +1,33 @@
-import { Component, signal, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { Component, signal, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+import { HttpClientModule, HttpClient } from "@angular/common/http";
 
 @Component({
-  selector: 'app-login',
+  selector: "app-login",
   standalone: true,
   imports: [CommonModule, FormsModule, HttpClientModule],
-  templateUrl: './login.html',
+  templateUrl: "./login.html",
 })
 export class Login implements OnInit {
-  email = ''; // Può indicare anche lo username
+  email = ""; // Può indicare anche lo username
 
   constructor(private router: Router, private http: HttpClient) {}
 
   ngOnInit() {
     // 🔹 Se c'è un accessToken valido, rimanda subito a home
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     if (token) {
-      this.router.navigate(['home']);
+      this.router.navigate(["home"]);
     }
   }
 
   onSubmit() {
-    if (!this.email) return alert('Inserisci un email o uno username!');
+    if (!this.email) return alert("Inserisci un email o uno username!");
 
     // Salva subito l'email in localStorage
-    localStorage.setItem('userEmail', this.email);
+    localStorage.setItem("userEmail", this.email);
 
     // Chiama il backend per verificare se esiste
     this.http
@@ -37,14 +37,14 @@ export class Login implements OnInit {
       .subscribe({
         next: (res) => {
           if (res.exists) {
-            this.router.navigate(['email-found']);
+            this.router.navigate(["email-found"]);
           } else {
-            this.router.navigate(['register']);
+            this.router.navigate(["register"]);
           }
         },
         error: (err) => {
           console.error(err);
-          alert('Errore server!');
+          alert("Errore server!");
         },
       });
   }

@@ -1,12 +1,15 @@
-import { inject } from '@angular/core';
-import { HttpRequest, HttpHandlerFn, HttpEvent, HttpInterceptorFn } from '@angular/common/http';
-import { Observable, from, throwError } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
-import { AuthService } from './auth.service';
+import { inject } from "@angular/core";
+import { HttpRequest, HttpHandlerFn, HttpEvent, HttpInterceptorFn } from "@angular/common/http";
+import { Observable, from, throwError } from "rxjs";
+import { catchError, switchMap } from "rxjs/operators";
+import { AuthService } from "./auth.service";
 
 let isRefreshing = false; // 🔒 impedisce richieste di refresh multiple
 
-export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: HttpHandlerFn): Observable<HttpEvent<any>> => {
+export const authInterceptor: HttpInterceptorFn = (
+  req: HttpRequest<any>,
+  next: HttpHandlerFn
+): Observable<HttpEvent<any>> => {
   const auth = inject(AuthService);
   const token = auth.getToken();
   let authReq = req;
@@ -19,7 +22,7 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: 
   }
 
   return next(authReq).pipe(
-    catchError(err => {
+    catchError((err) => {
       // 👇 Se riceviamo un 400 (token scaduto)
       if (err.status === 400 && !isRefreshing) {
         isRefreshing = true;
@@ -31,7 +34,7 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: 
             const newToken = auth.getToken();
             if (!newToken) {
               auth.logout();
-              return throwError(() => new Error('Impossibile aggiornare il token'));
+              return throwError(() => new Error("Impossibile aggiornare il token"));
             }
 
             // 🔁 Ritenta la richiesta originale con il nuovo token
@@ -41,7 +44,7 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: 
 
             return next(newReq);
           }),
-          catchError(refreshErr => {
+          catchError((refreshErr) => {
             isRefreshing = false;
             auth.logout();
             return throwError(() => refreshErr);

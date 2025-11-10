@@ -16,7 +16,7 @@ html,
 body {
   height: 100%;
   margin: 0;
-  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  font-family: "Poppins", "Segoe UI", sans-serif;
   background: var(--background-color);
   color: var(--text-color);
 }

@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule, HttpClient, HttpHeaders } from "@angular/common/http";
 import { Router } from "@angular/router";
+import { PageCoreComponent } from "../page-core/page-core";
 
 interface VoteOption {
   label: string;
@@ -12,7 +13,7 @@ interface VoteOption {
 @Component({
   selector: "app-new-vote",
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, PageCoreComponent],
   templateUrl: "./new-vote.html",
   styleUrls: ["./new-vote.css"],
 })
@@ -187,7 +188,7 @@ export class NewVote {
       },
     });
   }
-  
+
   handleButtonClick() {
     if (this.buttonLabel === "Invia voto") {
       this.submitVote();

@@ -16,10 +16,6 @@ header p {
   margin-bottom: 2rem;
 }
 
-.actions {
-  margin-bottom: 3rem;
-}
-
 .btn {
   background-color: #1d4ed8;
   color: white;
@@ -32,29 +28,6 @@ header p {
 
 .btn:hover {
   background-color: #2563eb;
-}
-
-.btn.secondary {
-  background-color: #6b7280;
-}
-
-.btn.secondary:hover {
-  background-color: #4b5563;
-}
-
-.features h2 {
-  margin-bottom: 1rem;
-}
-
-.features ul {
-  list-style: none;
-  padding: 0;
-}
-
-.features li {
-  margin: 0.5rem 0;
-  font-size: 1.1rem;
-  color: #333;
 }
 
 footer {
