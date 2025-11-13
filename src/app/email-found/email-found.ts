@@ -2,13 +2,13 @@
 import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-import { HttpClient, HttpClientModule, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 
 @Component({
   selector: "app-email-found",
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: "./email-found.html",
 })
 export class EmailFound implements OnInit {

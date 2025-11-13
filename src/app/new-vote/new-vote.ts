@@ -1,8 +1,7 @@
 import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-import { HttpClientModule, HttpClient, HttpHeaders } from "@angular/common/http";
-import { Router } from "@angular/router";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { PageCoreComponent } from "../page-core/page-core";
 
 interface VoteOption {
@@ -13,12 +12,12 @@ interface VoteOption {
 @Component({
   selector: "app-new-vote",
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule, PageCoreComponent],
+  imports: [CommonModule, FormsModule, PageCoreComponent],
   templateUrl: "./new-vote.html",
   styleUrls: ["./new-vote.css"],
 })
 export class NewVote {
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient) {}
 
   // ===== voti =====
   votes: VoteOption[] = [

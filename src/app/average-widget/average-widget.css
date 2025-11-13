@@ -40,3 +40,45 @@
     opacity: 1;
   }
 }
+
+/* Pulsante refresh */
+.refresh-btn {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: none;
+  background: #000;
+  cursor: pointer;
+  transition: background 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.refresh-btn:hover:not(:disabled) {
+  background: #000;
+}
+
+.refresh-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Spinner per icona Font Awesome */
+.spinner, .refresh-btn fa-icon.spin {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+button {
+  margin-top: 0.24rem !important;
+  border: none;
+  background: none;
+  cursor: pointer;
+}

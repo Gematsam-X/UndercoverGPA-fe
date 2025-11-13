@@ -4,7 +4,8 @@ import { Observable, from, throwError } from "rxjs";
 import { catchError, switchMap } from "rxjs/operators";
 import { AuthService } from "./auth.service";
 
-let isRefreshing = false; // 🔒 impedisce richieste di refresh multiple
+let isRefreshing: boolean = false; // 🔒 impedisce richieste di refresh multiple
+const errorCodes: number[] = [400, 401, 402, 403];
 
 export const authInterceptor: HttpInterceptorFn = (
   req: HttpRequest<any>,
@@ -23,8 +24,8 @@ export const authInterceptor: HttpInterceptorFn = (
 
   return next(authReq).pipe(
     catchError((err) => {
-      // 👇 Se riceviamo un 400 (token scaduto)
-      if (err.status === 400 && !isRefreshing) {
+      // 👇 Se riceviamo un errore
+      if (errorCodes.includes(err.status) && !isRefreshing) {
         isRefreshing = true;
 
         return from(auth.refreshToken()).pipe(
@@ -52,8 +53,8 @@ export const authInterceptor: HttpInterceptorFn = (
         );
       }
 
-      // 🧱 Se è un 400 durante un refresh già in corso, si forza il logout
-      if (err.status === 400 && isRefreshing) {
+      // 🧱 Se è un errore durante un refresh già in corso, si forza il logout
+      if (errorCodes.includes(err.status) && isRefreshing) {
         auth.logout();
       }
 
