@@ -38,13 +38,13 @@ export class AverageWidget implements OnInit {
 
  private async loadVotes() {
     try {
-      let storedVotes = await this.db.getItem<Vote[]>("voti");
+      let storedVotes = await this.db.getItem<Vote[]>("votes");
 
       if (!Array.isArray(storedVotes) || storedVotes.length === 0) {
         storedVotes = await firstValueFrom(
           this.http.get<Vote[]>("http://localhost:3000/api/votes", { withCredentials: true })
         );
-        await this.db.setItem("voti", storedVotes);
+        await this.db.setItem("votes", storedVotes);
       }
 
       this.allVotes.set(Array.isArray(storedVotes) ? storedVotes : []);
@@ -63,7 +63,7 @@ export class AverageWidget implements OnInit {
 
       if (Array.isArray(freshVotes)) {
         this.allVotes.set(freshVotes);
-        await this.db.setItem("voti", freshVotes);
+        await this.db.setItem("votes", freshVotes);
         console.log("Voti aggiornati con successo dal server!");
       }
     } catch (err) {

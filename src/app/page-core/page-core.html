@@ -5,29 +5,31 @@
   </div>
 
   @if (showHomeButton) {
-    <fa-icon 
-      [icon]="faHome" 
-      class="floating-btn top-right" 
-      title="Torna alla home" 
-      (click)="goHome()">
-    </fa-icon>
-  }
-
-  @if (showAddButton) {
-    <fa-icon 
-      [icon]="faPlus" 
-      class="floating-btn bottom-right" 
-      title="Aggiungi un nuovo voto" 
-      (click)="addVote()">
-    </fa-icon>
-  }
-
-  @if (showBackButton) {
-    <fa-icon 
-      [icon]="faBack" 
-      class="floating-btn top-left" 
-      title="Torna indietro" 
-      (click)="goBack()">
-    </fa-icon>
+  <fa-icon
+    [icon]="faHome"
+    class="floating-btn top-right"
+    title="Torna alla home"
+    (click)="goHome()"
+  >
+  </fa-icon>
+  } @if (showAddButton) {
+  <fa-icon
+    [icon]="faPlus"
+    class="floating-btn bottom-right"
+    title="Aggiungi un nuovo voto"
+    (click)="addVote()"
+  >
+  </fa-icon>
+  } @if (showBackButton) {
+  <fa-icon [icon]="faBack" class="floating-btn top-left" title="Torna indietro" (click)="goBack()">
+  </fa-icon>
+  } @if (showManageVotesButton) {
+  <fa-icon
+    [icon]="faManageVotes"
+    class="floating-btn bottom-left"
+    title="Gestisci i tuoi voti"
+    (click)="goToManageVotes()"
+  >
+  </fa-icon>
   }
 </div>

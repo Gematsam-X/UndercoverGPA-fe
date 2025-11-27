@@ -58,6 +58,10 @@
       placeholder="Inserisci un voto tra 4 e 10"
     />
 
+    <!-- ===== DATE SELECTOR ===== -->
+    <label for="vote-date">Seleziona la data del voto:</label>
+    <input type="date" id="vote-date" [(ngModel)]="selectedDate" />
+
     <!-- ===== MESSAGGIO DI FEEDBACK ===== -->
     <p class="feedback" [style.color]="voteMessageColor">{{ voteMessage }}</p>
 

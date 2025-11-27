@@ -5,6 +5,7 @@ import { Homepage } from "./homepage/homepage";
 import { Login } from "./login/login";
 import { NewVote } from "./new-vote/new-vote";
 import { Register } from "./register/register";
+import { ManageVotesComponent } from "./manage-votes/manage-votes";
 
 export const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -13,4 +14,5 @@ export const routes: Routes = [
   { path: "email-found", component: EmailFound },
   { path: "home", component: Homepage, canActivate: [authGuard] },
   { path: "new-vote", component: NewVote, canActivate: [authGuard] },
+  { path: "manage-votes", component: ManageVotesComponent, canActivate: [authGuard] },
 ];

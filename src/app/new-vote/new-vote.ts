@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { PageCoreComponent } from "../page-core/page-core";
+import { IndexedDBStorageService } from "../services/indexeddb-storage.service";
 
 interface VoteOption {
   label: string;
@@ -17,7 +18,10 @@ interface VoteOption {
   styleUrls: ["./new-vote.css"],
 })
 export class NewVote {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private idbService: IndexedDBStorageService) {
+    const today = new Date();
+    this.selectedDate = today.toISOString().split("T")[0];
+  }
 
   // ===== voti =====
   votes: VoteOption[] = [
@@ -49,21 +53,26 @@ export class NewVote {
   ];
 
   selectedVote: VoteOption | null = null;
+  selectedDate: string | null = null; // formato ISO YYYY-MM-DD
   customVote: number | null = null;
 
   // ===== materie =====
   subjects: string[] = [
-    "Matematica",
-    "Italiano",
-    "Inglese",
-    "Storia",
-    "Geografia",
-    "Fisica",
-    "Chimica",
-    "Tecnologia",
     "Arte",
+    "Educazione Civica",
+    "Educazione Fisica",
+    "Geografia",
+    "Geometria",
+    "Inglese",
+    "Italiano",
+    "Matematica",
     "Musica",
+    "Scienze",
+    "Spagnolo",
+    "Storia",
+    "Tecnologia",
   ];
+
   selectedSubject: string | null = null; // dropdown
   customSubject: string | null = null; // input personalizzato
 
@@ -104,6 +113,7 @@ export class NewVote {
     this.selectedSubject = null;
     this.customSubject = null;
     this.selectedExamType = null;
+    this.selectedDate = new Date().toISOString().split("T")[0];
     this.voteMessage = "";
     this.voteMessageColor = "var(--primary-color)";
     this.buttonLabel = "Invia voto";
@@ -159,7 +169,9 @@ export class NewVote {
       value: voteToSend.value,
       subject: subjectToSend,
       examType: this.selectedExamType,
-      createdAt: new Date().toISOString(),
+      createdAt: this.selectedDate
+        ? new Date(this.selectedDate).toISOString()
+        : new Date().toISOString(),
     };
 
     // ===== invio =====
@@ -170,14 +182,26 @@ export class NewVote {
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
 
     this.http.post("http://localhost:3000/api/votes", payload, { headers }).subscribe({
-      next: () => {
+      next: async () => {
         this.voteMessage = `✅ Voto "${payload.label}" per ${payload.subject} (${payload.examType}) inviato!`;
         this.voteMessageColor = "green";
         this.isSubmitting = false;
-
-        // Cambia il pulsante per resettare al prossimo click
         this.buttonLabel = "Invia un altro voto";
+
+        // ===== Aggiorna IndexedDB =====
+        try {
+          // Prendi i voti già salvati
+          const existingVotes = (await this.idbService.getItem<VoteOption[]>("votes")) || [];
+          // Aggiungi il nuovo voto
+          existingVotes.push(payload);
+          // Salva tutto di nuovo
+          await this.idbService.setItem("votes", existingVotes);
+          console.log("✅ Voti aggiornati in IndexedDB:", existingVotes);
+        } catch (err) {
+          console.error("❌ Errore aggiornamento IndexedDB:", err);
+        }
       },
+
       error: (err) => {
         console.error("Errore invio voto:", err);
         this.voteMessage = "❌ Errore nell'invio del voto. Riprova più tardi.";
