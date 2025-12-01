@@ -1,23 +1,25 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
 import { tap } from "rxjs/operators";
 import { Observable } from "rxjs";
+import { ApiService } from "../services/api.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class AuthService {
-  private baseUrl = "http://localhost:3000/api/auth";
+  private basePath = "auth";
 
-  constructor(private http: HttpClient) {}
+  constructor(private api: ApiService) {}
 
   // Login: ritorna accessToken e username
-  login(email: string, password: string): Observable<{ accessToken: string; username: string }> {
-    return this.http
+  login(
+    email: string,
+    password: string
+  ): Observable<{ accessToken: string; username: string }> {
+    return this.api
       .post<{ accessToken: string; username: string }>(
-        `${this.baseUrl}/login`,
-        { email, password },
-        { withCredentials: true } // necessario per cookie HTTP-only
+        `${this.basePath}/login`,
+        { email, password } // il withCredentials lo aggiunge ApiService
       )
       .pipe(
         tap((res) => {
@@ -32,13 +34,12 @@ export class AuthService {
     console.log("Logging out user from the auth service.");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("username");
-    // opzionale: chiamare backend per invalidare refresh token
   }
 
   // Rinnova accessToken usando refreshToken nel cookie
   refreshToken(): Observable<{ accessToken: string }> {
-    return this.http
-      .post<{ accessToken: string }>(`${this.baseUrl}/token`, {}, { withCredentials: true })
+    return this.api
+      .post<{ accessToken: string }>(`${this.basePath}/token`, {})
       .pipe(
         tap((res) => {
           localStorage.setItem("accessToken", res.accessToken);

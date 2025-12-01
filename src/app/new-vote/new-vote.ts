@@ -1,9 +1,10 @@
 import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpHeaders } from "@angular/common/http";
 import { PageCoreComponent } from "../page-core/page-core";
 import { IndexedDBStorageService } from "../services/indexeddb-storage.service";
+import { ApiService } from "../services/api.service";
 
 interface VoteOption {
   label: string;
@@ -18,7 +19,7 @@ interface VoteOption {
   styleUrls: ["./new-vote.css"],
 })
 export class NewVote {
-  constructor(private http: HttpClient, private idbService: IndexedDBStorageService) {
+  constructor(private api: ApiService, private idbService: IndexedDBStorageService) {
     const today = new Date();
     this.selectedDate = today.toISOString().split("T")[0];
   }
@@ -181,7 +182,7 @@ export class NewVote {
     const token = localStorage.getItem("accessToken") || "";
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
 
-    this.http.post("http://localhost:3000/api/votes", payload, { headers }).subscribe({
+    this.api.post("votes", payload, { headers }).subscribe({
       next: async () => {
         this.voteMessage = `✅ Voto "${payload.label}" per ${payload.subject} (${payload.examType}) inviato!`;
         this.voteMessageColor = "green";

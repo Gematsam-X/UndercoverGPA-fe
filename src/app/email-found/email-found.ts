@@ -2,8 +2,8 @@
 import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
+import { ApiService } from "../services/api.service";
 
 @Component({
   selector: "app-email-found",
@@ -15,7 +15,7 @@ export class EmailFound implements OnInit {
   email = localStorage.getItem("userEmail") || ""; // prende l'email da localStorage
   password = "";
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private api: ApiService, private router: Router) {}
 
   ngOnInit() {
     if (!this.email) {
@@ -28,28 +28,25 @@ export class EmailFound implements OnInit {
     if (!this.password) return alert("Inserisci la password!");
 
     // chiama il backend per login con JWT
-    this.http
+    this.api
       .post<{
         message: string;
         accessToken: string;
         username: string;
       }>(
-        "http://localhost:3000/api/auth/login",
+        "auth/login",
         {
           email: this.email,
           password: this.password,
-        },
-        { withCredentials: true }
+        }
       )
       .subscribe({
         next: (res) => {
-          // Salviamo
           localStorage.setItem("accessToken", res.accessToken);
           localStorage.setItem("username", res.username);
 
           alert(res.message + " 👌 Benvenuto " + res.username);
 
-          // Redirect a home
           this.router.navigate(["home"]);
         },
         error: (err) => {

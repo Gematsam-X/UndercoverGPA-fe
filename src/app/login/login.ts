@@ -2,8 +2,7 @@ import { Component, signal, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-import { HttpClient } from "@angular/common/http";
-
+import { ApiService } from "../services/api.service";
 @Component({
   selector: "app-login",
   standalone: true,
@@ -13,7 +12,7 @@ import { HttpClient } from "@angular/common/http";
 export class Login implements OnInit {
   email = ""; // Può indicare anche lo username
 
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(private router: Router, private api: ApiService) {}
 
   ngOnInit() {
     // 🔹 Se c'è un accessToken valido, rimanda subito a home
@@ -30,8 +29,8 @@ export class Login implements OnInit {
     localStorage.setItem("userEmail", this.email);
 
     // Chiama il backend per verificare se esiste
-    this.http
-      .get<{ exists: boolean }>(`http://localhost:3000/api/auth/check`, {
+    this.api
+      .get<{ exists: boolean }>("auth/check", {
         params: { email: this.email },
       })
       .subscribe({

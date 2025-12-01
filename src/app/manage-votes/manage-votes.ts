@@ -1,5 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { IndexedDBStorageService } from "../services/indexeddb-storage.service";
+import { ApiService } from "../services/api.service";
+import { firstValueFrom } from "rxjs";
 
 interface Vote {
   _id?: number;
@@ -18,7 +20,7 @@ interface Vote {
 export class ManageVotesComponent implements OnInit {
   votes: Vote[] = [];
 
-  constructor(private dbService: IndexedDBStorageService) {}
+  constructor(private dbService: IndexedDBStorageService, private api: ApiService) {}
 
   async ngOnInit() {
     await this.loadVotes();
@@ -41,12 +43,10 @@ export class ManageVotesComponent implements OnInit {
 
   async syncWithMongo() {
     try {
-      const response = await fetch("http://localhost:3000/api/votes", {
-        method: "GET",
-        credentials: "include", // qui si mette il "withCredentials: true"
-      });
-      const remoteVotes: Vote[] = await response.json();
+      const remoteVotes = await firstValueFrom(this.api.get<Vote[]>("votes"));
+
       await this.dbService.setItem("votes", remoteVotes);
+      // Ricarica i dati locali
       await this.loadVotes();
     } catch (err) {
       console.error("Errore sincronizzazione:", err);

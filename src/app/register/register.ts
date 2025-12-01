@@ -2,8 +2,8 @@
 import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
+import { ApiService } from "../services/api.service";
 
 @Component({
   selector: "app-register",
@@ -16,13 +16,13 @@ export class Register {
   password = "";
   username = "";
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private api: ApiService, private router: Router) {}
 
   onSubmit() {
     if (!this.email) return alert("Email mancante!");
 
-    this.http
-      .post("http://localhost:3000/api/auth/register", {
+    this.api
+      .post("auth/register", {
         email: this.email,
         password: this.password,
         username: this.username,

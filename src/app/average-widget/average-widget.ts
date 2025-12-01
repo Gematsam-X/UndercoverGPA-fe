@@ -1,12 +1,11 @@
 import { CommonModule } from "@angular/common";
 import { Component, computed, signal, OnInit, input } from "@angular/core";
 import { IndexedDBStorageService } from "../services/indexeddb-storage.service";
-import { HttpClient } from "@angular/common/http";
+import { ApiService } from "../services/api.service";
 import { firstValueFrom } from "rxjs";
-
 // Font Awesome
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { faSyncAlt } from "@fortawesome/free-solid-svg-icons";
 
 interface Vote {
   subject: string;
@@ -30,20 +29,18 @@ export class AverageWidget implements OnInit {
 
   faSync = faSyncAlt; // 🔹 icona Font Awesome
 
-  constructor(private db: IndexedDBStorageService, private http: HttpClient) {}
+  constructor(private db: IndexedDBStorageService, private api: ApiService) {}
 
   async ngOnInit() {
     await this.loadVotes();
   }
 
- private async loadVotes() {
+  private async loadVotes() {
     try {
       let storedVotes = await this.db.getItem<Vote[]>("votes");
 
       if (!Array.isArray(storedVotes) || storedVotes.length === 0) {
-        storedVotes = await firstValueFrom(
-          this.http.get<Vote[]>("http://localhost:3000/api/votes", { withCredentials: true })
-        );
+        storedVotes = await firstValueFrom(this.api.get<Vote[]>("votes"));
         await this.db.setItem("votes", storedVotes);
       }
 
@@ -58,7 +55,7 @@ export class AverageWidget implements OnInit {
     this.isRefreshing.set(true); // 🔹 inizio loader
     try {
       const freshVotes = await firstValueFrom(
-        this.http.get<Vote[]>("http://localhost:3000/api/votes", { withCredentials: true })
+        this.api.get<Vote[]>("votes")
       );
 
       if (Array.isArray(freshVotes)) {

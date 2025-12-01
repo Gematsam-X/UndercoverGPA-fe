@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../environments/environment';
 import { Observable } from 'rxjs';
 
@@ -12,7 +12,7 @@ export class ApiService {
   constructor(private http: HttpClient) {}
 
   // GET generico
-  get<T>(endpoint: string, options?: { headers?: HttpHeaders }): Observable<T> {
+  get<T>(endpoint: string, options: Record<string, any> = {}): Observable<T> {
     return this.http.get<T>(`${this.baseUrl}/${endpoint}`, {
       withCredentials: true,
       observe: 'body',
@@ -21,7 +21,7 @@ export class ApiService {
   }
 
   // POST generico
-  post<T>(endpoint: string, body: any, options?: { headers?: HttpHeaders }): Observable<T> {
+  post<T>(endpoint: string, body: any, options: Record<string, any> = {}): Observable<T> {
     return this.http.post<T>(`${this.baseUrl}/${endpoint}`, body, {
       withCredentials: true,
       observe: 'body',
@@ -30,7 +30,7 @@ export class ApiService {
   }
 
   // PUT generico
-  put<T>(endpoint: string, body: any, options?: { headers?: HttpHeaders }): Observable<T> {
+  put<T>(endpoint: string, body: any, options: Record<string, any> = {}): Observable<T> {
     return this.http.put<T>(`${this.baseUrl}/${endpoint}`, body, {
       withCredentials: true,
       observe: 'body',
@@ -39,7 +39,7 @@ export class ApiService {
   }
 
   // DELETE generico
-  delete<T>(endpoint: string, options?: { headers?: HttpHeaders }): Observable<T> {
+  delete<T>(endpoint: string, options: Record<string, any> = {}): Observable<T> {
     return this.http.delete<T>(`${this.baseUrl}/${endpoint}`, {
       withCredentials: true,
       observe: 'body',

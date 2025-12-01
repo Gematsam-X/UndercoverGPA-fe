@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "wait-on tcp:localhost:3000 && ng serve",
+    "start": "wait-on tcp:localhost:3000 && google-chrome http://localhost:4200 & ng serve",
     "build": "ng build",
+    "build:prod": "ng build --configuration production --aot --build-optimizer --optimization --common-chunk --vendor-chunk --output-hashing=all --no-progress",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

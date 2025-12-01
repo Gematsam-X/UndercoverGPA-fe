@@ -1,8 +1,8 @@
 import { inject } from "@angular/core";
 import { CanActivateFn, Router } from "@angular/router";
-import { HttpClient } from "@angular/common/http";
 import { jwtDecode } from "jwt-decode";
 import { firstValueFrom } from "rxjs";
+import { ApiService } from "../services/api.service";
 
 interface JWTPayload {
   exp: number;
@@ -11,7 +11,7 @@ interface JWTPayload {
 
 export const authGuard: CanActivateFn = async () => {
   const router = inject(Router);
-  const http = inject(HttpClient);
+  const api = inject(ApiService);
   const accessToken = localStorage.getItem("accessToken");
 
   // 🧩 1️⃣ Se non c’è token → login
@@ -41,9 +41,7 @@ export const authGuard: CanActivateFn = async () => {
 
     try {
       // 🔄 4️⃣ Richiedi nuovo accessToken usando il refreshToken nel cookie
-      const res: any = await firstValueFrom(
-        http.post("http://localhost:3000/api/auth/token", {}, { withCredentials: true })
-      );
+      const res: any = await firstValueFrom(api.post("auth/token", {}));
 
       // ✅ 5️⃣ Se il server risponde con un nuovo accessToken → salvalo
       if (res?.accessToken) {
@@ -55,17 +53,16 @@ export const authGuard: CanActivateFn = async () => {
       }
     } catch (refreshError) {
       // Provo a contattare il server prima di sloggare
-      fetch("http://localhost:3000", { method: "GET", mode: "no-cors" })
-        .then(() => {
+      api.get("ok").subscribe({
+        next: () => {
           console.error("❌ Errore durante il refresh:", refreshError);
           localStorage.removeItem("accessToken");
           router.navigate(["login"]);
-          return false;
-        })
-        .catch(() => {
+        },
+        error: () => {
           console.warn("⚠️ Server offline, niente redirect");
-          return false;
-        });
+        },
+      });
 
       return false; // per sicurezza
     }
