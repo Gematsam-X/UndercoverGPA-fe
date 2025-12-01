@@ -5,6 +5,7 @@ import { HttpHeaders } from "@angular/common/http";
 import { PageCoreComponent } from "../page-core/page-core";
 import { IndexedDBStorageService } from "../services/indexeddb-storage.service";
 import { ApiService } from "../services/api.service";
+import { firstValueFrom } from "rxjs";
 
 interface VoteOption {
   label: string;
@@ -154,7 +155,7 @@ export class NewVote {
       }
       const label = Number.isInteger(this.customVote)
         ? `${this.customVote}`
-        : `${this.customVote}`.replace(/\.0+$/, "");
+        : `${this.customVote}`.replace(/.0+$/, "");
       voteToSend = { label, value: this.customVote };
     }
 
@@ -182,8 +183,9 @@ export class NewVote {
     const token = localStorage.getItem("accessToken") || "";
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
 
-    this.api.post("votes", payload, { headers }).subscribe({
-      next: async () => {
+    this.api.post<any>("votes", payload, { headers }).subscribe({
+      next: async (savedVote) => {
+        // savedVote deve contenere _id generato dal server
         this.voteMessage = `✅ Voto "${payload.label}" per ${payload.subject} (${payload.examType}) inviato!`;
         this.voteMessageColor = "green";
         this.isSubmitting = false;
@@ -191,11 +193,8 @@ export class NewVote {
 
         // ===== Aggiorna IndexedDB =====
         try {
-          // Prendi i voti già salvati
           const existingVotes = (await this.idbService.getItem<VoteOption[]>("votes")) || [];
-          // Aggiungi il nuovo voto
-          existingVotes.push(payload);
-          // Salva tutto di nuovo
+          existingVotes.push(savedVote.vote); // ⚡ ora include _id
           await this.idbService.setItem("votes", existingVotes);
           console.log("✅ Voti aggiornati in IndexedDB:", existingVotes);
         } catch (err) {
