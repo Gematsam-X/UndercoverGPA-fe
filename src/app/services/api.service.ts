@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../environments/environment';
-import { Observable } from 'rxjs';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { environment } from "../../environments/environment";
+import { Observable } from "rxjs";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class ApiService {
   private baseUrl = environment.apiUrl;
@@ -15,8 +15,8 @@ export class ApiService {
   get<T>(endpoint: string, options: Record<string, any> = {}): Observable<T> {
     return this.http.get<T>(`${this.baseUrl}/${endpoint}`, {
       withCredentials: true,
-      observe: 'body',
-      ...options
+      observe: "body",
+      ...options,
     });
   }
 
@@ -24,8 +24,8 @@ export class ApiService {
   post<T>(endpoint: string, body: any, options: Record<string, any> = {}): Observable<T> {
     return this.http.post<T>(`${this.baseUrl}/${endpoint}`, body, {
       withCredentials: true,
-      observe: 'body',
-      ...options
+      observe: "body",
+      ...options,
     });
   }
 
@@ -33,8 +33,8 @@ export class ApiService {
   put<T>(endpoint: string, body: any, options: Record<string, any> = {}): Observable<T> {
     return this.http.put<T>(`${this.baseUrl}/${endpoint}`, body, {
       withCredentials: true,
-      observe: 'body',
-      ...options
+      observe: "body",
+      ...options,
     });
   }
 
@@ -42,8 +42,8 @@ export class ApiService {
   delete<T>(endpoint: string, options: Record<string, any> = {}): Observable<T> {
     return this.http.delete<T>(`${this.baseUrl}/${endpoint}`, {
       withCredentials: true,
-      observe: 'body',
-      ...options
+      observe: "body",
+      ...options,
     });
   }
 }
