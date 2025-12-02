@@ -1,0 +1,246 @@
+/* ===============================
+   🎨 Container principale Manage Votes
+   =============================== */
+.manage-votes-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+
+.manage-votes-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+/* ===============================
+   🔹 Header e azioni
+   =============================== */
+.mv-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.mv-header h1 {
+  font-size: 2rem;
+  margin: 0;
+  color: var(--primary-color);
+}
+
+.mv-actions button {
+  margin-left: 0.5rem;
+}
+
+/* ===============================
+   🔹 Filtro e ricerca
+   =============================== */
+.mv-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.mv-filter input[type="search"] {
+  flex: 1;
+}
+
+.mv-sort-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.mv-sort-buttons button {
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.mv-filter label {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.mv-filter input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+/* ===============================
+   🔹 Tabella voti
+   =============================== */
+.mv-table-wrapper {
+  overflow-x: auto;
+}
+
+.mv-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+}
+
+.mv-table th,
+.mv-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+  transition: var(--transition);
+}
+
+.mv-table th {
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: 600;
+}
+
+.mv-table tbody tr:hover {
+  background-color: rgba(79, 70, 229, 0.05);
+}
+
+.row-actions button {
+  margin-right: 0.3rem;
+  padding: 0.3rem 0.7rem;
+  margin-bottom: 0.2rem;
+  font-size: 0.9rem;
+  border-radius: var(--border-radius);
+}
+
+.row-actions .danger {
+  background-color: #f87171;
+}
+
+.row-actions .danger:hover {
+  background-color: #ef4444;
+}
+
+/* ===============================
+   🔹 Messaggio vuoto
+   =============================== */
+.mv-empty {
+  text-align: center;
+  padding: 2rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* ===============================
+   🔹 Modali
+   =============================== */
+.mv-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(30, 41, 59, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  animation: fadeInUp 0.3s ease forwards;
+}
+
+.mv-modal {
+  background: var(--card-bg);
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  max-width: 400px;
+  width: 90%;
+  text-align: left;
+}
+
+.mv-modal h2 {
+  margin-top: 0;
+  color: var(--primary-color);
+}
+
+.mv-modal p {
+  margin: 1rem 0;
+  color: var(--text-color);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.modal-actions button {
+  font-size: 0.95rem;
+}
+
+/* ===============================
+   🔹 Footer
+   =============================== */
+.mv-footer {
+  margin-top: 2rem;
+  text-align: right;
+  font-size: 0.9rem;
+  color: #475569;
+}
+
+/* ===============================
+   🔹 Animazioni
+   =============================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===============================
+   📱 Responsività
+   =============================== */
+@media (max-width: 768px) {
+  .mv-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .mv-actions {
+    margin-top: 1rem;
+  }
+
+  .mv-table th,
+  .mv-table td {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .mv-filter {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+.rotating {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

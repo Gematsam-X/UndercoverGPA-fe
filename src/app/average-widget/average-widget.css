@@ -60,13 +60,8 @@
   background: #000;
 }
 
-.refresh-btn:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
 /* Spinner per icona Font Awesome */
-.spinner, .refresh-btn fa-icon.spin {
+.rotating {
   display: inline-block;
   animation: spin 1s linear infinite;
 }

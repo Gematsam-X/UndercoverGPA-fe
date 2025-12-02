@@ -5,7 +5,7 @@ import { ApiService } from "../services/api.service";
 import { firstValueFrom } from "rxjs";
 // Font Awesome
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { faSyncAlt } from "@fortawesome/free-solid-svg-icons";
+import { faSync } from "@fortawesome/free-solid-svg-icons";
 
 interface Vote {
   subject: string;
@@ -27,7 +27,7 @@ export class AverageWidget implements OnInit {
   subject = input<string>("");
   isRefreshing = signal(false);
 
-  faSync = faSyncAlt; // 🔹 icona Font Awesome
+  faSync = faSync;
 
   constructor(private db: IndexedDBStorageService, private api: ApiService) {}
 

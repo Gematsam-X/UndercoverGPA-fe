@@ -194,7 +194,7 @@ export class NewVote {
         // ===== Aggiorna IndexedDB =====
         try {
           const existingVotes = (await this.idbService.getItem<VoteOption[]>("votes")) || [];
-          existingVotes.push(savedVote.vote); // ⚡ ora include _id
+          existingVotes.push(savedVote.vote); // ora include _id
           await this.idbService.setItem("votes", existingVotes);
           console.log("✅ Voti aggiornati in IndexedDB:", existingVotes);
         } catch (err) {

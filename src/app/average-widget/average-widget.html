@@ -1,12 +1,14 @@
 <div class="avg-circle animate-pop">
   <span class="avg-value">{{ average() }}</span>
   <p class="avg-label">
-    <ng-container *ngIf="subject()">{{ subject() }} </ng-container>
-    Media attuale
+    @if (subject()) {<ng-container>{{ subject() }} </ng-container>} Media attuale
   </p>
 
   <button class="refresh-btn" (click)="refreshVotes()" [disabled]="isRefreshing()">
-    @if (!isRefreshing()) {<fa-icon [icon]="faSync"></fa-icon>}
-    @if (isRefreshing()) {<span class="spinner">⏳</span>}
+    @if (!isRefreshing()) {<fa-icon [icon]="faSync"></fa-icon>} @if (isRefreshing()) {<fa-icon
+      class="rotating"
+      [icon]="faSync"
+    ></fa-icon
+    >}
   </button>
 </div>
