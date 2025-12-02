@@ -1,25 +1,15 @@
-.vote-container {
-  max-width: 520px;
-  margin: 2.5rem auto;
-  padding: 1.8rem;
-  background: var(--card-bg);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow);
-  text-align: center;
-  transition: var(--transition);
+* {
+  max-width: 80vw;
+  overflow: hidden;
 }
 
-.vote-container:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-}
-
-.vote-container h2 {
+h2 {
   color: var(--primary-color);
   font-size: 1.8rem;
   margin-bottom: 1rem;
   font-weight: 600;
   letter-spacing: 0.5px;
+  text-align: center;
 }
 
 /* generic inputs/select */
@@ -46,11 +36,22 @@ input[type="number"]:focus {
 
 /* exam type radios */
 .exam-type {
-  display: flex;
   gap: 0.6rem;
   justify-content: center;
   align-items: center;
   margin-bottom: 1rem;
+}
+
+.exam-type button {
+  padding: 0.5rem 1rem;
+  margin-top: 5rem !important;
+}
+
+@media screen and (max-width: 400px) {
+  .exam-type {
+    display: flex;
+    gap: 0.4rem;
+  }
 }
 
 .small-label {
@@ -83,7 +84,6 @@ button {
   border: none;
   border-radius: var(--border-radius);
   background-color: var(--primary-color);
-  color: white;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;

@@ -1,25 +1,8 @@
 /* ===============================
-   🎨 Container principale Manage Votes
-   =============================== */
-.manage-votes-container {
-  max-width: 900px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: var(--card-bg);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow);
-  transition: var(--transition);
-}
-
-.manage-votes-container:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-}
-
-/* ===============================
    🔹 Header e azioni
    =============================== */
 .mv-header {
+  margin-top: 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;

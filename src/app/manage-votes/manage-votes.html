@@ -1,142 +1,140 @@
 <page-core [showManageVotesButton]="false">
-  <div class="manage-votes-container">
-    <!-- Header / toolbar -->
-    <header class="mv-header">
-      <h1>Gestione Voti</h1>
-      <div class="mv-actions">
-        @if (!isRefreshingVotes) {
-        <button type="button" (click)="syncWithMongo()" aria-label="Sincronizza voti">
-          <fa-icon [icon]="refreshIcon"></fa-icon></button
-        >} @else {
-        <button type="button" disabled aria-label="Sincronizza voti">
-          <fa-icon class="rotating" [icon]="refreshIcon"></fa-icon></button
+  <!-- Header / toolbar -->
+  <header class="mv-header">
+    <h1>Gestione Voti</h1>
+    <div class="mv-actions">
+      @if (!isRefreshingVotes) {
+      <button type="button" (click)="syncWithMongo()" aria-label="Sincronizza voti">
+        <fa-icon [icon]="refreshIcon"></fa-icon></button
+      >} @else {
+      <button type="button" disabled aria-label="Sincronizza voti">
+        <fa-icon class="rotating" [icon]="refreshIcon"></fa-icon></button
+      >}
+    </div>
+  </header>
+
+  <!-- Ricerca / filtro semplice -->
+  <section class="mv-filter">
+    <input
+      type="search"
+      placeholder="Cerca per materia, etichetta o tipo di prova..."
+      [(ngModel)]="filterText"
+      aria-label="Cerca voti"
+    />
+    <div class="mv-sort-buttons">
+      <button type="button" (click)="setSort('date')">
+        Data @if (sortBy === 'date') {<span>{{ sortAsc ? "▲" : "▼" }}</span
         >}
-      </div>
-    </header>
-
-    <!-- Ricerca / filtro semplice -->
-    <section class="mv-filter">
-      <input
-        type="search"
-        placeholder="Cerca per materia, etichetta o tipo di prova..."
-        [(ngModel)]="filterText"
-        aria-label="Cerca voti"
-      />
-      <div class="mv-sort-buttons">
-        <button type="button" (click)="setSort('date')">
-          Data @if (sortBy === 'date') {<span>{{ sortAsc ? "▲" : "▼" }}</span
-          >}
-        </button>
-        <button type="button" (click)="setSort('value')">
-          Valore @if (sortBy === 'value') {<span>{{ sortAsc ? "▲" : "▼" }}</span
-          >}
-        </button>
-        <button type="button" (click)="setSort('subject')">
-          Materia @if (sortBy === 'subject') {<span>{{ sortAsc ? "▲" : "▼" }}</span
-          >}
-        </button>
-      </div>
-    </section>
-
-    <!-- Stato quando i voti sono vuoti -->
-    @if (votes.length === 0) {
-    <div class="mv-empty">
-      <p>Nessun voto disponibile. Premi <b>Sincronizza</b> o inseriscine uno nuovo.</p>
+      </button>
+      <button type="button" (click)="setSort('value')">
+        Valore @if (sortBy === 'value') {<span>{{ sortAsc ? "▲" : "▼" }}</span
+        >}
+      </button>
+      <button type="button" (click)="setSort('subject')">
+        Materia @if (sortBy === 'subject') {<span>{{ sortAsc ? "▲" : "▼" }}</span
+        >}
+      </button>
     </div>
-    } @else {
-    <!-- Tabella voti -->
-    <section class="mv-table-wrapper">
-      <table class="mv-table">
-        <thead>
-          <tr>
-            <th>Etichetta</th>
-            <th>Valore</th>
-            <th>Materia</th>
-            <th>Tipo</th>
-            <th>Creato il</th>
-            <th class="actions-col">Azioni</th>
-          </tr>
-        </thead>
+  </section>
 
-        <tbody>
-          @for (v of filteredVotes; track v._id) {
-          <tr>
-            <td>{{ v.label }}</td>
-            <td>{{ v.value }}</td>
-            <td>{{ v.subject }}</td>
-            <td>{{ v.examType }}</td>
-            <td>{{ v.createdAt ? (v.createdAt | date : "dd/MM/yyyy") : "ND" }}</td>
-            <td class="row-actions">
-              <button type="button" (click)="editVote(v._id)">
-                <fa-icon [icon]="editIcon"></fa-icon> Modifica
-              </button>
-              <button type="button" (click)="confirmDeleteId = v._id ?? null" class="danger">
-                <fa-icon [icon]="deleteIcon"></fa-icon> Elimina
-              </button>
-            </td>
-          </tr>
-          }
-        </tbody>
-      </table>
-    </section>
-    }
-
-    <!-- Conferma eliminazione -->
-    @if (confirmDeleteId != null) {
-    <div class="mv-modal-backdrop" role="dialog" aria-modal="true">
-      <div class="mv-modal">
-        <h2>Conferma eliminazione</h2>
-        <p>{{ deleteVoteText }}</p>
-        <div class="modal-actions">
-          <button type="button" (click)="deleteVote(confirmDeleteId)" [disabled]="isDeleting">
-            {{ isDeleting ? "Eliminazione..." : "Sì, elimina" }}
-          </button>
-
-          <button type="button" (click)="confirmDeleteId = null">Annulla</button>
-        </div>
-      </div>
-    </div>
-    }
-
-    <!-- Modale modifica -->
-    @if (editingVote) {
-    <div class="mv-modal-backdrop">
-      <div class="mv-modal">
-        <h2>Modifica Voto</h2>
-        <form (ngSubmit)="saveEditedVote()">
-          <label>
-            Etichetta
-            <input type="text" [(ngModel)]="editingVote.label" name="label" />
-          </label>
-
-          <label>
-            Valore
-            <input type="number" [(ngModel)]="editingVote.value" name="value" />
-          </label>
-
-          <label>
-            Materia
-            <input type="text" [(ngModel)]="editingVote.subject" name="subject" />
-          </label>
-
-          <label>
-            Tipo esame
-            <input type="text" [(ngModel)]="editingVote.examType" name="examType" />
-          </label>
-
-          <div class="modal-actions">
-            <button type="submit">Salva</button>
-            <button type="button" (click)="cancelEdit()">Annulla</button>
-          </div>
-        </form>
-      </div>
-    </div>
-    }
-
-    <footer class="mv-footer">
-      <small
-        >Numero voti: <b>{{ votes.length || 0 }}</b></small
-      >
-    </footer>
+  <!-- Stato quando i voti sono vuoti -->
+  @if (votes.length === 0) {
+  <div class="mv-empty">
+    <p>Nessun voto disponibile. Premi <b>Sincronizza</b> o inseriscine uno nuovo.</p>
   </div>
+  } @else {
+  <!-- Tabella voti -->
+  <section class="mv-table-wrapper">
+    <table class="mv-table">
+      <thead>
+        <tr>
+          <th>Etichetta</th>
+          <th>Valore</th>
+          <th>Materia</th>
+          <th>Tipo</th>
+          <th>Creato il</th>
+          <th class="actions-col">Azioni</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (v of filteredVotes; track v._id) {
+        <tr>
+          <td>{{ v.label }}</td>
+          <td>{{ v.value }}</td>
+          <td>{{ v.subject }}</td>
+          <td>{{ v.examType }}</td>
+          <td>{{ v.createdAt ? (v.createdAt | date : "dd/MM/yyyy") : "ND" }}</td>
+          <td class="row-actions">
+            <button type="button" (click)="editVote(v._id)">
+              <fa-icon [icon]="editIcon"></fa-icon> Modifica
+            </button>
+            <button type="button" (click)="confirmDeleteId = v._id ?? null" class="danger">
+              <fa-icon [icon]="deleteIcon"></fa-icon> Elimina
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </section>
+  }
+
+  <!-- Conferma eliminazione -->
+  @if (confirmDeleteId != null) {
+  <div class="mv-modal-backdrop" role="dialog" aria-modal="true">
+    <div class="mv-modal">
+      <h2>Conferma eliminazione</h2>
+      <p>{{ deleteVoteText }}</p>
+      <div class="modal-actions">
+        <button type="button" (click)="deleteVote(confirmDeleteId)" [disabled]="isDeleting">
+          {{ isDeleting ? "Eliminazione..." : "Sì, elimina" }}
+        </button>
+
+        <button type="button" (click)="confirmDeleteId = null">Annulla</button>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- Modale modifica -->
+  @if (editingVote) {
+  <div class="mv-modal-backdrop">
+    <div class="mv-modal">
+      <h2>Modifica Voto</h2>
+      <form (ngSubmit)="saveEditedVote()">
+        <label>
+          Etichetta
+          <input type="text" [(ngModel)]="editingVote.label" name="label" />
+        </label>
+
+        <label>
+          Valore
+          <input type="number" [(ngModel)]="editingVote.value" name="value" />
+        </label>
+
+        <label>
+          Materia
+          <input type="text" [(ngModel)]="editingVote.subject" name="subject" />
+        </label>
+
+        <label>
+          Tipo esame
+          <input type="text" [(ngModel)]="editingVote.examType" name="examType" />
+        </label>
+
+        <div class="modal-actions">
+          <button type="submit">Salva</button>
+          <button type="button" (click)="cancelEdit()">Annulla</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  }
+
+  <footer class="mv-footer">
+    <small
+      >Numero voti: <b>{{ votes.length || 0 }}</b></small
+    >
+  </footer>
 </page-core>
