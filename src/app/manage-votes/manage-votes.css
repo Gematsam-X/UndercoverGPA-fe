@@ -1,121 +1,141 @@
+:root {
+  --color-yellow: #facc15;
+  --color-red: #ef4444;
+  --color-green: #22c55e;
+}
+
+.vote-red {
+  background-color: var(--color-red);
+}
+
+.vote-yellow {
+  background-color: var(--color-yellow);
+}
+
+.vote-green {
+  background-color: var(--color-green);
+}
+
 /* ===============================
-   🔹 Header e azioni
+   🔹 Header e azioni (bubbles ready)
    =============================== */
 .mv-header {
-  margin-top: 40px;
+  margin-top: 20px;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
+  gap: 0.5rem;
 }
 
 .mv-header h1 {
-  font-size: 2rem;
-  margin: 0;
+  font-size: 1.8rem;
   color: var(--primary-color);
+  text-align: center;
+}
+
+.mv-actions {
+  display: flex;
+  gap: 0.5rem;
 }
 
 .mv-actions button {
-  margin-left: 0.5rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--primary-color);
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.mv-actions button:hover {
+  transform: scale(1.1);
 }
 
 /* ===============================
-   🔹 Filtro e ricerca
+   🔹 Filtro e ordinamento (badge style)
    =============================== */
 .mv-filter {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.mv-filter input[type="search"] {
-  flex: 1;
-}
-
-.mv-sort-buttons {
-  display: flex;
+  justify-content: center;
   gap: 0.5rem;
   margin-bottom: 1rem;
 }
 
-.mv-sort-buttons button {
-  background-color: var(--primary-color);
-  border: none;
+.mv-filter input[type="search"] {
+  flex: 1 1 200px;
+  padding: 0.5rem 0.8rem;
   border-radius: var(--border-radius);
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  transition: var(--transition);
+  border: 1px solid #ccc;
 }
 
-.mv-filter label {
+.mv-sort-buttons {
   display: flex;
-  align-items: center;
-  font-weight: 500;
-  color: var(--text-color);
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
-.mv-filter input[type="checkbox"] {
-  margin-right: 0.5rem;
-}
-
-/* ===============================
-   🔹 Tabella voti
-   =============================== */
-.mv-table-wrapper {
-  overflow-x: auto;
-}
-
-.mv-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: var(--card-bg);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow);
-}
-
-.mv-table th,
-.mv-table td {
-  padding: 0.75rem 1rem;
-  text-align: left;
-  border-bottom: 1px solid #e2e8f0;
-  transition: var(--transition);
-}
-
-.mv-table th {
+.mv-sort-buttons button {
+  padding: 0.4rem 0.8rem;
+  border-radius: 1.2rem;
+  border: none;
   background-color: var(--primary-color);
   color: white;
   font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-.mv-table tbody tr:hover {
-  background-color: rgba(79, 70, 229, 0.05);
+.mv-sort-buttons button:hover {
+  background-color: #3730a3;
 }
 
-.row-actions button {
-  margin-right: 0.3rem;
-  padding: 0.3rem 0.7rem;
-  margin-bottom: 0.2rem;
-  font-size: 0.9rem;
-  border-radius: var(--border-radius);
-}
-
-.row-actions .danger {
-  background-color: #f87171;
-}
-
-.row-actions .danger:hover {
-  background-color: #ef4444;
+.mv-sort-buttons span {
+  margin-left: 0.3rem;
+  font-size: 0.8rem;
 }
 
 /* ===============================
-   🔹 Messaggio vuoto
+   🔹 Tabella voti → trasformata in bubbles
    =============================== */
-.mv-empty {
+.mv-table-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: center;
+}
+
+.mv-table-wrapper .vote-bubble {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+
+.mv-table-wrapper .vote-bubble:hover {
+  transform: scale(1.15);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+.vote-label {
+  font-size: 0.75rem;
   text-align: center;
-  padding: 2rem;
-  color: #64748b;
-  font-weight: 500;
+}
+
+.vote-value {
+  font-size: 1.2rem;
 }
 
 /* ===============================
@@ -123,55 +143,29 @@
    =============================== */
 .mv-modal-backdrop {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: rgba(30, 41, 59, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 999;
-  animation: fadeInUp 0.3s ease forwards;
 }
 
 .mv-modal {
   background: var(--card-bg);
-  padding: 2rem;
+  padding: 1.5rem;
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
-  max-width: 400px;
   width: 90%;
-  text-align: left;
-}
-
-.mv-modal h2 {
-  margin-top: 0;
-  color: var(--primary-color);
-}
-
-.mv-modal p {
-  margin: 1rem 0;
-  color: var(--text-color);
-}
-
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
-  margin-top: 1rem;
-}
-
-.modal-actions button {
-  font-size: 0.95rem;
+  max-width: 350px;
 }
 
 /* ===============================
    🔹 Footer
    =============================== */
 .mv-footer {
-  margin-top: 2rem;
-  text-align: right;
+  margin-top: 1.5rem;
+  text-align: center;
   font-size: 0.9rem;
   color: #475569;
 }
@@ -179,41 +173,6 @@
 /* ===============================
    🔹 Animazioni
    =============================== */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ===============================
-   📱 Responsività
-   =============================== */
-@media (max-width: 768px) {
-  .mv-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .mv-actions {
-    margin-top: 1rem;
-  }
-
-  .mv-table th,
-  .mv-table td {
-    padding: 0.5rem 0.75rem;
-  }
-
-  .mv-filter {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-}
-
 .rotating {
   display: inline-block;
   animation: spin 1s linear infinite;
@@ -226,4 +185,22 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.deleteVote {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  background: #f87171;
+  border: none;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 20px;
+  display: flex; /* display flex per centrare */
+  justify-content: center; /* orizzontalmente */
+  align-items: center; /* verticalmente */
+  cursor: pointer;
+  padding: 0; /* niente padding extra */
 }

@@ -6,7 +6,8 @@ import { IndexedDBStorageService } from "../services/indexeddb-storage.service";
 import { ApiService } from "../services/api.service";
 import { PageCoreComponent } from "../page-core/page-core";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { faEdit, faSync, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faSync } from "@fortawesome/free-solid-svg-icons";
+import { Router } from "@angular/router";
 
 interface Vote {
   _id?: number;
@@ -34,19 +35,18 @@ export class ManageVotesComponent implements OnInit {
   // Conferma eliminazione
   confirmDeleteId: number | null | undefined = null;
 
-  // Modifica voto
-  editingVote: Vote | null = null;
-
   deleteVoteText: string = "Vuoi davvero eliminare questo voto?";
   isDeleting: boolean = false;
 
   isRefreshingVotes: boolean = false;
 
   refreshIcon = faSync;
-  editIcon = faEdit;
-  deleteIcon = faTrash;
 
-  constructor(private dbService: IndexedDBStorageService, private api: ApiService) {}
+  constructor(
+    private dbService: IndexedDBStorageService,
+    private api: ApiService,
+    private router: Router
+  ) {}
 
   async ngOnInit() {
     await this.loadVotes();
@@ -92,23 +92,8 @@ export class ManageVotesComponent implements OnInit {
     if (!v) return;
 
     // Clone profondo semplice
-    this.editingVote = JSON.parse(JSON.stringify(v));
-  }
-
-  cancelEdit() {
-    this.editingVote = null;
-  }
-
-  async saveEditedVote() {
-    if (!this.editingVote || !this.editingVote._id) return;
-
-    const idx = this.votes.findIndex((v) => v._id === this.editingVote!._id);
-    if (idx !== -1) {
-      this.votes[idx] = { ...this.editingVote };
-      await this.dbService.setItem("votes", this.votes);
-    }
-
-    this.editingVote = null;
+    sessionStorage.setItem("editingVote", JSON.stringify(v));
+    this.router.navigate(["/new-vote"], { queryParams: { edit: "true" } });
   }
 
   async syncWithMongo() {
@@ -166,6 +151,12 @@ export class ManageVotesComponent implements OnInit {
     }
 
     return result;
+  }
+
+  getBubbleColor(v: number): string {
+    if (v >= 4 && v <= 4.99) return "#ef4444D9";
+    else if (v >= 4.99 && v <= 5.99) return "#facc15D9";
+    else return "#22c55eD9";
   }
 
   // Funzione per cambiare ordinamento

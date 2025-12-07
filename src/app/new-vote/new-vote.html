@@ -3,14 +3,15 @@
 
   <!-- ===== SUBJECT (materia) ===== -->
   <label for="subject-select">Seleziona la materia:</label>
+  <br />
   <select id="subject-select" [(ngModel)]="selectedSubject" (change)="onSubjectChange()">
     <option [ngValue]="null" disabled selected hidden>-- Scegli la materia --</option>
     @for (s of subjects; track $index) {
     <option [value]="s">{{ s }}</option>
     }
   </select>
-
-  <label for="custom-subject">Oppure inserisci un'altra materia:</label>
+  <br />
+  <label for="custom-subject">Oppure inserisci un'altra materia:</label><br />
   <input
     id="custom-subject"
     type="text"
@@ -19,7 +20,7 @@
     placeholder="Scrivi la materia qui..."
     maxlength="60"
   />
-
+  <br />
   <!-- ===== EXAM TYPE ===== -->
   <div class="exam-type">
     <p class="small-label">Tipo di prova:</p>
@@ -35,17 +36,17 @@
       <input type="radio" name="examType" [(ngModel)]="selectedExamType" value="orale" /> Orale
     </label>
   </div>
-
+  <br />
   <!-- ===== VOTE SELECT / CUSTOM ===== -->
-  <label for="vote-select">Seleziona un voto:</label>
+  <label for="vote-select">Seleziona un voto:</label><br />
   <select id="vote-select" [(ngModel)]="selectedVote" (change)="onDropdownChange()">
     <option [ngValue]="null" disabled selected hidden>-- Scegli il voto --</option>
     @for (vote of votes; track $index) {
     <option [ngValue]="vote">{{ vote.label }}</option>
     }
   </select>
-
-  <label for="custom-vote">Oppure inserisci un voto personalizzato (4-10):</label>
+  <br />
+  <label for="custom-vote">Oppure inserisci un voto personalizzato (4-10):</label><br />
   <input
     type="number"
     id="custom-vote"
@@ -56,14 +57,15 @@
     step="0.01"
     placeholder="Inserisci un voto tra 4 e 10"
   />
-
+  <br />
   <!-- ===== DATE SELECTOR ===== -->
   <label for="vote-date">Seleziona la data del voto:</label>
+  <br />
   <input type="date" id="vote-date" [(ngModel)]="selectedDate" />
-
+  <br />
   <!-- ===== MESSAGGIO DI FEEDBACK ===== -->
   <p class="feedback" [style.color]="voteMessageColor">{{ voteMessage }}</p>
-
+  <br />
   <!-- ===== PULSANTE INVIO ===== -->
   <button id="submitvote" (click)="handleButtonClick()" [disabled]="isSubmitting">
     {{ buttonLabel }}

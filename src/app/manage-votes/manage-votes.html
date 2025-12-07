@@ -38,47 +38,36 @@
   </section>
 
   <!-- Stato quando i voti sono vuoti -->
-  @if (votes.length === 0) {
+  @if (filteredVotes.length === 0) {
   <div class="mv-empty">
     <p>Nessun voto disponibile. Premi <b>Sincronizza</b> o inseriscine uno nuovo.</p>
   </div>
-  } @else {
-  <!-- Tabella voti -->
-  <section class="mv-table-wrapper">
-    <table class="mv-table">
-      <thead>
-        <tr>
-          <th>Etichetta</th>
-          <th>Valore</th>
-          <th>Materia</th>
-          <th>Tipo</th>
-          <th>Creato il</th>
-          <th class="actions-col">Azioni</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        @for (v of filteredVotes; track v._id) {
-        <tr>
-          <td>{{ v.label }}</td>
-          <td>{{ v.value }}</td>
-          <td>{{ v.subject }}</td>
-          <td>{{ v.examType }}</td>
-          <td>{{ v.createdAt ? (v.createdAt | date : "dd/MM/yyyy") : "ND" }}</td>
-          <td class="row-actions">
-            <button type="button" (click)="editVote(v._id)">
-              <fa-icon [icon]="editIcon"></fa-icon> Modifica
-            </button>
-            <button type="button" (click)="confirmDeleteId = v._id ?? null" class="danger">
-              <fa-icon [icon]="deleteIcon"></fa-icon> Elimina
-            </button>
-          </td>
-        </tr>
-        }
-      </tbody>
-    </table>
-  </section>
   }
+
+<!-- Voti in bubbles -->
+@if (filteredVotes.length > 0) {
+  <div class="mv-table-wrapper">
+    @for (v of filteredVotes; track v._id) {
+      <div
+        class="vote-bubble"
+        [style.backgroundColor]="getBubbleColor(v.value)"
+        (click)="editVote(v._id)"
+      >
+        <div class="vote-label">{{ v.label }}</div>
+        <div class="vote-label">{{ v.subject }}</div>
+
+        <button
+          (click)="$event.stopPropagation(); confirmDeleteId = v._id"
+          class="deleteVote"
+        >
+          ×
+        </button>
+      </div>
+    }
+  </div>
+}
+
+
 
   <!-- Conferma eliminazione -->
   @if (confirmDeleteId != null) {
@@ -93,41 +82,6 @@
 
         <button type="button" (click)="confirmDeleteId = null">Annulla</button>
       </div>
-    </div>
-  </div>
-  }
-
-  <!-- Modale modifica -->
-  @if (editingVote) {
-  <div class="mv-modal-backdrop">
-    <div class="mv-modal">
-      <h2>Modifica Voto</h2>
-      <form (ngSubmit)="saveEditedVote()">
-        <label>
-          Etichetta
-          <input type="text" [(ngModel)]="editingVote.label" name="label" />
-        </label>
-
-        <label>
-          Valore
-          <input type="number" [(ngModel)]="editingVote.value" name="value" />
-        </label>
-
-        <label>
-          Materia
-          <input type="text" [(ngModel)]="editingVote.subject" name="subject" />
-        </label>
-
-        <label>
-          Tipo esame
-          <input type="text" [(ngModel)]="editingVote.examType" name="examType" />
-        </label>
-
-        <div class="modal-actions">
-          <button type="submit">Salva</button>
-          <button type="button" (click)="cancelEdit()">Annulla</button>
-        </div>
-      </form>
     </div>
   </div>
   }

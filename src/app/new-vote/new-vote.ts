@@ -5,7 +5,7 @@ import { HttpHeaders } from "@angular/common/http";
 import { PageCoreComponent } from "../page-core/page-core";
 import { IndexedDBStorageService } from "../services/indexeddb-storage.service";
 import { ApiService } from "../services/api.service";
-import { firstValueFrom } from "rxjs";
+import { ActivatedRoute } from "@angular/router";
 
 interface VoteOption {
   label: string;
@@ -20,9 +20,50 @@ interface VoteOption {
   styleUrls: ["./new-vote.css"],
 })
 export class NewVote {
-  constructor(private api: ApiService, private idbService: IndexedDBStorageService) {
+  isEditMode = false;
+  editingVoteId: string | null = null;
+
+  constructor(
+    private api: ApiService,
+    private idbService: IndexedDBStorageService,
+    private route: ActivatedRoute
+  ) {
     const today = new Date();
     this.selectedDate = today.toISOString().split("T")[0];
+
+    this.checkEditMode();
+  }
+
+  checkEditMode() {
+    this.route.queryParams.subscribe((params) => {
+      if (params["edit"] === "true") {
+        const stored = sessionStorage.getItem("editingVote");
+        if (!stored) return;
+
+        const voteToEdit = JSON.parse(stored);
+
+        // Autofill campi...
+        this.selectedVote = this.votes.find((v) => v.value === voteToEdit.value) || null;
+        this.customVote = this.selectedVote ? null : voteToEdit.value;
+
+        this.selectedSubject = this.subjects.includes(voteToEdit.subject)
+          ? voteToEdit.subject
+          : null;
+        this.customSubject = this.selectedSubject ? null : voteToEdit.subject;
+
+        this.selectedExamType = voteToEdit.examType ?? null;
+
+        this.selectedDate = voteToEdit.createdAt
+          ? voteToEdit.createdAt.split("T")[0]
+          : new Date().toISOString().split("T")[0];
+
+        // Salvo ID!
+        this.editingVoteId = voteToEdit._id;
+        this.isEditMode = true;
+
+        this.buttonLabel = "Modifica voto";
+      }
+    });
   }
 
   // ===== voti =====
@@ -178,42 +219,57 @@ export class NewVote {
 
     // ===== invio =====
     this.isSubmitting = true;
-    this.buttonLabel = "Invio in corso...";
+    this.buttonLabel = this.isEditMode ? "Modifica in corso..." : "Invio in corso...";
 
     const token = localStorage.getItem("accessToken") || "";
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
 
-    this.api.post<any>("votes", payload, { headers }).subscribe({
+    // 🔥 Se edit → PUT /votes/:id
+    const request$ = this.isEditMode
+      ? this.api.put<any>(`votes/${this.editingVoteId}`, payload, { headers })
+      : this.api.post<any>(`votes`, payload, { headers });
+
+    request$.subscribe({
       next: async (savedVote) => {
-        // savedVote deve contenere _id generato dal server
-        this.voteMessage = `✅ Voto "${payload.label}" per ${payload.subject} (${payload.examType}) inviato!`;
+        this.voteMessage = this.isEditMode
+          ? `✏️ Voto modificato correttamente!`
+          : `✅ Voto "${payload.label}" per ${payload.subject} (${payload.examType}) inviato!`;
+
         this.voteMessageColor = "green";
         this.isSubmitting = false;
-        this.buttonLabel = "Invia un altro voto";
+        this.buttonLabel = this.isEditMode ? "Modifica effettuata" : "Invia un altro voto";
 
-        // ===== Aggiorna IndexedDB =====
+        // 🧠 Aggiornamento IndexedDB
         try {
-          const existingVotes = (await this.idbService.getItem<VoteOption[]>("votes")) || [];
-          existingVotes.push(savedVote.vote); // ora include _id
+          const existingVotes = (await this.idbService.getItem<any[]>("votes")) || [];
+
+          if (this.isEditMode) {
+            // sostituisci il voto vecchio con quello nuovo
+            const index = existingVotes.findIndex((v) => v._id === this.editingVoteId);
+            if (index !== -1) existingVotes[index] = savedVote.vote;
+          } else {
+            existingVotes.push(savedVote.vote);
+          }
+
           await this.idbService.setItem("votes", existingVotes);
-          console.log("✅ Voti aggiornati in IndexedDB:", existingVotes);
         } catch (err) {
           console.error("❌ Errore aggiornamento IndexedDB:", err);
         }
       },
 
       error: (err) => {
-        console.error("Errore invio voto:", err);
-        this.voteMessage = "❌ Errore nell'invio del voto. Riprova più tardi.";
+        this.voteMessage = `❌ Errore durante l'invio. Riprova più tardi. Dettagli: ${
+          err.message || err
+        }`;
         this.voteMessageColor = "red";
         this.isSubmitting = false;
-        this.buttonLabel = "Invia voto";
+        this.buttonLabel = this.isEditMode ? "Modifica voto" : "Invia voto";
       },
     });
   }
 
   handleButtonClick() {
-    if (this.buttonLabel === "Invia voto") {
+    if (this.buttonLabel === "Invia voto" || this.buttonLabel === "Modifica voto") {
       this.submitVote();
     } else if (this.buttonLabel === "Invia un altro voto") {
       this.resetForm();
