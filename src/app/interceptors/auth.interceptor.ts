@@ -2,7 +2,7 @@ import { inject } from "@angular/core";
 import { HttpRequest, HttpHandlerFn, HttpEvent, HttpInterceptorFn } from "@angular/common/http";
 import { Observable, from, throwError } from "rxjs";
 import { catchError, switchMap } from "rxjs/operators";
-import { AuthService } from "./auth.service";
+import { AuthService } from "../services/auth.service";
 
 let isRefreshing: boolean = false; // 🔒 impedisce richieste di refresh multiple
 const errorCodes: number[] = [400, 401, 402, 403];
