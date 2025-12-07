@@ -53,10 +53,25 @@ export class ManageVotesComponent implements OnInit {
   }
 
   async loadVotes() {
-    const storedVotes =
-      (await firstValueFrom(this.api.get<Vote[]>("votes"))) ||
-      (await this.dbService.getItem<Vote[]>("votes"));
-    this.votes = storedVotes || [];
+    try {
+      // 1️⃣ Prova a prendere i voti dal server
+      const remoteVotes = await firstValueFrom(this.api.get<Vote[]>("votes")).catch(() => null);
+
+      if (remoteVotes && Array.isArray(remoteVotes)) {
+        this.votes = remoteVotes;
+        await this.dbService.setItem("votes", remoteVotes); // salva in IndexedDB
+        return;
+      }
+
+      // 2️⃣ Se il server fallisce, prendi dalla IndexedDB
+      const storedVotes = await this.dbService.getItem<Vote[]>("votes").catch(() => null);
+
+      // ✅ Forza sempre un array vuoto se null o non array
+      this.votes = Array.isArray(storedVotes) ? storedVotes : [];
+    } catch (err) {
+      console.error("Errore caricamento voti:", err);
+      this.votes = []; // fallback
+    }
   }
 
   async deleteVote(id: number | undefined) {
