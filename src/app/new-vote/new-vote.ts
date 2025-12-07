@@ -20,8 +20,10 @@ interface VoteOption {
   styleUrls: ["./new-vote.css"],
 })
 export class NewVote {
-  isEditMode = false;
+  isEditMode: boolean = false;
   editingVoteId: string | null = null;
+  isFormDisabled: boolean = false; // inizialmente abilitato
+  title: string = "Nuovo voto";
 
   constructor(
     private api: ApiService,
@@ -30,7 +32,6 @@ export class NewVote {
   ) {
     const today = new Date();
     this.selectedDate = today.toISOString().split("T")[0];
-
     this.checkEditMode();
   }
 
@@ -60,7 +61,7 @@ export class NewVote {
         // Salvo ID!
         this.editingVoteId = voteToEdit._id;
         this.isEditMode = true;
-
+        this.title = "Modifica voto";
         this.buttonLabel = "Modifica voto";
       }
     });
@@ -241,12 +242,18 @@ export class NewVote {
 
         // 🧠 Aggiornamento IndexedDB
         try {
-          const existingVotes = (await this.idbService.getItem<any[]>("votes")) || [];
+          // Prendi tutti i voti, assicurandoti di avere sempre un array
+          let existingVotes = await this.idbService.getItem<any[]>("votes");
+          if (!Array.isArray(existingVotes)) existingVotes = []; // ✅ fallback se non esiste o non è array
 
           if (this.isEditMode) {
-            // sostituisci il voto vecchio con quello nuovo
             const index = existingVotes.findIndex((v) => v._id === this.editingVoteId);
-            if (index !== -1) existingVotes[index] = savedVote.vote;
+            if (index !== -1) {
+              existingVotes[index] = savedVote.vote;
+            } else {
+              // se non trovi il voto da modificare, puoi decidere di aggiungerlo
+              existingVotes.push(savedVote.vote);
+            }
           } else {
             existingVotes.push(savedVote.vote);
           }
@@ -271,8 +278,11 @@ export class NewVote {
   handleButtonClick() {
     if (this.buttonLabel === "Invia voto" || this.buttonLabel === "Modifica voto") {
       this.submitVote();
+      // Disabilita il form dopo l'invio
+      this.isFormDisabled = true;
     } else if (this.buttonLabel === "Invia un altro voto") {
       this.resetForm();
+      this.isFormDisabled = false; // riabilita tutto
     }
   }
 }

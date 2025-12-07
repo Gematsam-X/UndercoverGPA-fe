@@ -1,10 +1,15 @@
 <page-core [showAddButton]="false">
-  <h2 class="title">Nuovo Voto</h2>
+  <h2 class="title">{{ title }}</h2>
 
   <!-- ===== SUBJECT (materia) ===== -->
   <label for="subject-select">Seleziona la materia:</label>
   <br />
-  <select id="subject-select" [(ngModel)]="selectedSubject" (change)="onSubjectChange()">
+  <select
+    id="subject-select"
+    [(ngModel)]="selectedSubject"
+    (change)="onSubjectChange()"
+    [disabled]="isFormDisabled"
+  >
     <option [ngValue]="null" disabled selected hidden>-- Scegli la materia --</option>
     @for (s of subjects; track $index) {
     <option [value]="s">{{ s }}</option>
@@ -19,27 +24,54 @@
     (input)="onCustomSubjectChange()"
     placeholder="Scrivi la materia qui..."
     maxlength="60"
+    [disabled]="isFormDisabled"
   />
   <br />
+
   <!-- ===== EXAM TYPE ===== -->
   <div class="exam-type">
     <p class="small-label">Tipo di prova:</p>
     <label class="radio">
-      <input type="radio" name="examType" [(ngModel)]="selectedExamType" value="scritta" />
+      <input
+        type="radio"
+        name="examType"
+        [(ngModel)]="selectedExamType"
+        value="scritta"
+        [disabled]="isFormDisabled"
+      />
       Scritta
     </label>
     <label class="radio">
-      <input type="radio" name="examType" [(ngModel)]="selectedExamType" value="pratica" />
+      <input
+        type="radio"
+        name="examType"
+        [(ngModel)]="selectedExamType"
+        value="pratica"
+        [disabled]="isFormDisabled"
+      />
       Pratica
     </label>
     <label class="radio">
-      <input type="radio" name="examType" [(ngModel)]="selectedExamType" value="orale" /> Orale
+      <input
+        type="radio"
+        name="examType"
+        [(ngModel)]="selectedExamType"
+        value="orale"
+        [disabled]="isFormDisabled"
+      />
+      Orale
     </label>
   </div>
   <br />
+
   <!-- ===== VOTE SELECT / CUSTOM ===== -->
   <label for="vote-select">Seleziona un voto:</label><br />
-  <select id="vote-select" [(ngModel)]="selectedVote" (change)="onDropdownChange()">
+  <select
+    id="vote-select"
+    [(ngModel)]="selectedVote"
+    (change)="onDropdownChange()"
+    [disabled]="isFormDisabled"
+  >
     <option [ngValue]="null" disabled selected hidden>-- Scegli il voto --</option>
     @for (vote of votes; track $index) {
     <option [ngValue]="vote">{{ vote.label }}</option>
@@ -56,16 +88,20 @@
     max="10"
     step="0.01"
     placeholder="Inserisci un voto tra 4 e 10"
+    [disabled]="isFormDisabled"
   />
   <br />
+
   <!-- ===== DATE SELECTOR ===== -->
   <label for="vote-date">Seleziona la data del voto:</label>
   <br />
-  <input type="date" id="vote-date" [(ngModel)]="selectedDate" />
+  <input type="date" id="vote-date" [(ngModel)]="selectedDate" [disabled]="isFormDisabled" />
   <br />
+
   <!-- ===== MESSAGGIO DI FEEDBACK ===== -->
   <p class="feedback" [style.color]="voteMessageColor">{{ voteMessage }}</p>
   <br />
+
   <!-- ===== PULSANTE INVIO ===== -->
   <button id="submitvote" (click)="handleButtonClick()" [disabled]="isSubmitting">
     {{ buttonLabel }}

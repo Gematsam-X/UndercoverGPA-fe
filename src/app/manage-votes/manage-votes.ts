@@ -52,6 +52,18 @@ export class ManageVotesComponent implements OnInit {
     await this.loadVotes();
   }
 
+  // nel tuo componente TS
+  formatLabel(label: any): string {
+    // prova a convertire in numero
+    const num = Number(label);
+    // se è un numero valido (non NaN), arrotonda a max 3 decimali
+    if (!isNaN(num)) {
+      return num.toFixed(3).replace(/\.?0+$/, ""); // rimuove zeri finali se servono
+    }
+    // altrimenti ritorna così com'è
+    return label;
+  }
+
   async loadVotes() {
     try {
       // 1️⃣ Prova a prendere i voti dal server
@@ -129,9 +141,10 @@ export class ManageVotesComponent implements OnInit {
 
   // Getter che restituisce voti filtrati e ordinati
   get filteredVotes(): Vote[] {
+    const votesArray = Array.isArray(this.votes) ? this.votes : []; // ✅ garantisce array
     const text = this.filterText.toLowerCase();
 
-    let result = this.votes.filter((v) => {
+    let result = votesArray.filter((v) => {
       const matchesText =
         v.label.toLowerCase().includes(text) ||
         v.subject.toLowerCase().includes(text) ||

@@ -44,30 +44,27 @@
   </div>
   }
 
-<!-- Voti in bubbles -->
-@if (filteredVotes.length > 0) {
+  <!-- Voti in bubbles -->
+  @if (filteredVotes.length > 0) {
   <div class="mv-table-wrapper">
     @for (v of filteredVotes; track v._id) {
-      <div
-        class="vote-bubble"
-        [style.backgroundColor]="getBubbleColor(v.value)"
-        (click)="editVote(v._id)"
-      >
-        <div class="vote-label">{{ v.label }}</div>
-        <div class="vote-label">{{ v.subject }}</div>
-
-        <button
-          (click)="$event.stopPropagation(); confirmDeleteId = v._id"
-          class="deleteVote"
-        >
-          ×
-        </button>
+    <div
+      class="vote-bubble"
+      [style.backgroundColor]="getBubbleColor(v.value)"
+      (click)="editVote(v._id)"
+    >
+      <div class="vote-label">
+        {{ formatLabel(v.label) }}
       </div>
+      <div class="vote-label">{{ v.subject }}</div>
+
+      <button (click)="$event.stopPropagation(); confirmDeleteId = v._id" class="deleteVote">
+        ×
+      </button>
+    </div>
     }
   </div>
-}
-
-
+  }
 
   <!-- Conferma eliminazione -->
   @if (confirmDeleteId != null) {
