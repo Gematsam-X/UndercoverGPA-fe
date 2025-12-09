@@ -1,11 +1,13 @@
 import { inject } from "@angular/core";
 import { HttpRequest, HttpHandlerFn, HttpEvent, HttpInterceptorFn } from "@angular/common/http";
-import { Observable, from, throwError } from "rxjs";
-import { catchError, switchMap } from "rxjs/operators";
+import { Observable, from, throwError, BehaviorSubject, of } from "rxjs";
+import { catchError, switchMap, filter, take } from "rxjs/operators";
 import { AuthService } from "../services/auth.service";
 
-let isRefreshing: boolean = false; // 🔒 impedisce richieste di refresh multiple
 const errorCodes: number[] = [400, 401, 402, 403];
+
+let isRefreshing = false;
+const refreshTokenSubject = new BehaviorSubject<string | null>(null);
 
 export const authInterceptor: HttpInterceptorFn = (
   req: HttpRequest<any>,
@@ -13,9 +15,8 @@ export const authInterceptor: HttpInterceptorFn = (
 ): Observable<HttpEvent<any>> => {
   const auth = inject(AuthService);
   const token = auth.getToken();
-  let authReq = req;
 
-  // 🔑 Se abbiamo un accessToken, aggiungiamolo all'header Authorization
+  let authReq = req;
   if (token) {
     authReq = req.clone({
       setHeaders: { Authorization: `Bearer ${token}` },
@@ -23,39 +24,48 @@ export const authInterceptor: HttpInterceptorFn = (
   }
 
   return next(authReq).pipe(
-    catchError((err) => {
-      // 👇 Se riceviamo un errore
-      if (errorCodes.includes(err.status) && !isRefreshing) {
-        isRefreshing = true;
+    catchError(err => {
+      if (errorCodes.includes(err.status)) {
+        if (!isRefreshing) {
+          isRefreshing = true;
+          refreshTokenSubject.next(null); // reset
 
-        return from(auth.refreshToken()).pipe(
-          switchMap(() => {
-            isRefreshing = false;
+          return from(auth.refreshToken()).pipe(
+            switchMap(() => {
+              const newToken = auth.getToken();
+              if (!newToken) {
+                auth.logout();
+                return throwError(() => new Error("Impossibile aggiornare il token"));
+              }
 
-            const newToken = auth.getToken();
-            if (!newToken) {
+              isRefreshing = false;
+              refreshTokenSubject.next(newToken);
+
+              const newReq = req.clone({
+                setHeaders: { Authorization: `Bearer ${newToken}` },
+              });
+
+              return next(newReq);
+            }),
+            catchError(refreshErr => {
+              isRefreshing = false;
               auth.logout();
-              return throwError(() => new Error("Impossibile aggiornare il token"));
-            }
-
-            // 🔁 Ritenta la richiesta originale con il nuovo token
-            const newReq = req.clone({
-              setHeaders: { Authorization: `Bearer ${newToken}` },
-            });
-
-            return next(newReq);
-          }),
-          catchError((refreshErr) => {
-            isRefreshing = false;
-            auth.logout();
-            return throwError(() => refreshErr);
-          })
-        );
-      }
-
-      // 🧱 Se è un errore durante un refresh già in corso, si forza il logout
-      if (errorCodes.includes(err.status) && isRefreshing) {
-        auth.logout();
+              return throwError(() => refreshErr);
+            })
+          );
+        } else {
+          // 🚀 Se è già in corso un refresh, metti la richiesta in attesa
+          return refreshTokenSubject.pipe(
+            filter(token => token != null), // aspetta fino a che arriva il token nuovo
+            take(1),
+            switchMap(newToken => {
+              const newReq = req.clone({
+                setHeaders: { Authorization: `Bearer ${newToken}` },
+              });
+              return next(newReq);
+            })
+          );
+        }
       }
 
       return throwError(() => err);
