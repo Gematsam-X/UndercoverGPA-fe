@@ -2,6 +2,8 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../../environments/environment";
 import { Observable } from "rxjs";
+import { finalize } from "rxjs/operators";
+import { ConnectingServerService } from "../services/connecting-server.service";
 
 @Injectable({
   providedIn: "root",
@@ -9,41 +11,66 @@ import { Observable } from "rxjs";
 export class ApiService {
   private baseUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private connectingService: ConnectingServerService
+  ) {}
 
-  // GET generico
+  private withPendingCheck<T>(obs: Observable<T>): Observable<T> {
+    let finished = false;
+
+    const timer = setTimeout(() => {
+      if (!finished) {
+        this.connectingService.show();  // 👈 mostra il component
+      }
+    }, 1500);
+
+    return obs.pipe(
+      finalize(() => {
+        finished = true;
+        clearTimeout(timer);
+        this.connectingService.hide(); // 👈 nascondi quando finisce
+      })
+    );
+  }
+
   get<T>(endpoint: string, options: Record<string, any> = {}): Observable<T> {
-    return this.http.get<T>(`${this.baseUrl}/${endpoint}`, {
-      withCredentials: true,
-      observe: "body",
-      ...options,
-    });
+    return this.withPendingCheck(
+      this.http.get<T>(`${this.baseUrl}/${endpoint}`, {
+        withCredentials: true,
+        observe: "body",
+        ...options,
+      })
+    );
   }
 
-  // POST generico
   post<T>(endpoint: string, body: any, options: Record<string, any> = {}): Observable<T> {
-    return this.http.post<T>(`${this.baseUrl}/${endpoint}`, body, {
-      withCredentials: true,
-      observe: "body",
-      ...options,
-    });
+    return this.withPendingCheck(
+      this.http.post<T>(`${this.baseUrl}/${endpoint}`, body, {
+        withCredentials: true,
+        observe: "body",
+        ...options,
+      })
+    );
   }
 
-  // PUT generico
   put<T>(endpoint: string, body: any, options: Record<string, any> = {}): Observable<T> {
-    return this.http.put<T>(`${this.baseUrl}/${endpoint}`, body, {
-      withCredentials: true,
-      observe: "body",
-      ...options,
-    });
+    return this.withPendingCheck(
+      this.http.put<T>(`${this.baseUrl}/${endpoint}`, body, {
+        withCredentials: true,
+        observe: "body",
+        ...options,
+      })
+    );
   }
 
-  // DELETE generico
   delete<T>(endpoint: string, options: Record<string, any> = {}): Observable<T> {
-    return this.http.delete<T>(`${this.baseUrl}/${endpoint}`, {
-      withCredentials: true,
-      observe: "body",
-      ...options,
-    });
+    return this.withPendingCheck(
+      this.http.delete<T>(`${this.baseUrl}/${endpoint}`, {
+        withCredentials: true,
+        observe: "body",
+        ...options,
+      })
+    );
   }
 }
