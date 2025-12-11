@@ -6,11 +6,21 @@ export class ConnectingServerService {
   private connectingSubject = new BehaviorSubject<boolean>(false);
   isConnecting$ = this.connectingSubject.asObservable();
 
+  private pendingCount = 0; // numero di richieste in corso
+
   show() {
-    this.connectingSubject.next(true);
+    this.pendingCount++;
+    if (this.pendingCount === 1) {
+      // mostra la modale solo quando parte la prima richiesta
+      this.connectingSubject.next(true);
+    }
   }
 
   hide() {
-    this.connectingSubject.next(false);
+    this.pendingCount--;
+    if (this.pendingCount <= 0) {
+      this.pendingCount = 0;
+      this.connectingSubject.next(false); // nasconde la modale solo se non ci sono richieste pendenti
+    }
   }
 }
