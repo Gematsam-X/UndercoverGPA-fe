@@ -1,18 +1,41 @@
 <page-core [showBackButton]="false" [showHomeButton]="false">
-  <div class="homepage-container">
-    <header>
-      <h1>UndercoverGPA</h1>
-      <p>Benvenuto, {{ username }}</p>
+  <div class="container py-4">
+
+    <!-- BOTTONE FIXED IN ALTO A SINISTRA -->
+    <button class="btn btn-outline-primary position-fixed top-0 start-0 m-3" type="button" 
+            data-bs-toggle="offcanvas" data-bs-target="#appDrawer" aria-controls="appDrawer">
+      <fa-icon [icon]="drawerIcon"></fa-icon>
+    </button>
+
+    <!-- HEADER CENTRATO -->
+    <header class="text-center mb-4">
+      <h1 class="h2">UndercoverGPA</h1>
+      <p class="text-muted mb-0">Benvenuto, {{ username }}</p>
     </header>
 
-    <app-average-widget></app-average-widget>
+    <!-- WIDGET MEDIA VOTI -->
+    <app-average-widget class="mb-4"></app-average-widget>
 
-    <div class="main-container">
-      <button class="btn" (click)="redirectToNewVoteForm()">Registra un nuovo voto</button>
+    <!-- BOTTONE NUOVO VOTO -->
+    <div class="text-center mb-4">
+      <button class="btn btn-primary" (click)="redirectToNewVoteForm()">Registra un nuovo voto</button>
     </div>
 
-    <footer>
+    <!-- FOOTER -->
+    <footer class="text-center text-muted mt-5">
       <p>&copy; 2025 Gionatan Venturi - Gematsam X. Tutti i diritti riservati.</p>
     </footer>
+
+    <!-- DRAWER / OFFCANVAS SINISTRA -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="appDrawer" aria-labelledby="appDrawerLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="appDrawerLabel">Menu</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Chiudi"></button>
+      </div>
+      <div class="offcanvas-body">
+        <!-- LINK NAVIGAZIONE -->
+      </div>
+    </div>
+
   </div>
 </page-core>

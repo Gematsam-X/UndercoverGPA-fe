@@ -14,6 +14,12 @@ export const authInterceptor: HttpInterceptorFn = (
   next: HttpHandlerFn
 ): Observable<HttpEvent<any>> => {
   const auth = inject(AuthService);
+
+  // ⛔ non intercettare la richiesta di refresh
+  if (req.url.includes("/auth/token")) {
+    return next(req);
+  }
+
   const token = auth.getToken();
 
   let authReq = req;
@@ -24,7 +30,7 @@ export const authInterceptor: HttpInterceptorFn = (
   }
 
   return next(authReq).pipe(
-    catchError(err => {
+    catchError((err) => {
       if (errorCodes.includes(err.status)) {
         if (!isRefreshing) {
           isRefreshing = true;
@@ -47,7 +53,7 @@ export const authInterceptor: HttpInterceptorFn = (
 
               return next(newReq);
             }),
-            catchError(refreshErr => {
+            catchError((refreshErr) => {
               isRefreshing = false;
               auth.logout();
               return throwError(() => refreshErr);
@@ -56,9 +62,9 @@ export const authInterceptor: HttpInterceptorFn = (
         } else {
           // 🚀 Se è già in corso un refresh, metti la richiesta in attesa
           return refreshTokenSubject.pipe(
-            filter(token => token != null), // aspetta fino a che arriva il token nuovo
+            filter((token) => token != null), // aspetta fino a che arriva il token nuovo
             take(1),
-            switchMap(newToken => {
+            switchMap((newToken) => {
               const newReq = req.clone({
                 setHeaders: { Authorization: `Bearer ${newToken}` },
               });

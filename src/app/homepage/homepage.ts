@@ -3,15 +3,19 @@ import { CommonModule } from "@angular/common";
 import { RouterModule, Router } from "@angular/router";
 import { PageCoreComponent } from "../page-core/page-core";
 import { AverageWidget } from "../average-widget/average-widget";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { faBars, faBurger, faHamburger } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: "app-homepage",
   standalone: true,
-  imports: [CommonModule, RouterModule, PageCoreComponent, AverageWidget],
+  imports: [CommonModule, RouterModule, PageCoreComponent, AverageWidget, FontAwesomeModule],
   templateUrl: "./homepage.html",
   styleUrls: ["./homepage.css"],
 })
 export class Homepage {
+  drawerIcon = faBars;
+
   constructor(private router: Router) {}
 
   username = localStorage.getItem("username") || "utente";
