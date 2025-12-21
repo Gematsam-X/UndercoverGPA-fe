@@ -65,7 +65,6 @@ export class NewVote {
   // ===== voti =====
   votes: VoteOption[] = [
     { label: "4", value: 4 },
-    { label: "4+", value: 4.25 },
     { label: "4½", value: 4.5 },
     { label: "5-", value: 4.75 },
     { label: "5", value: 5 },
