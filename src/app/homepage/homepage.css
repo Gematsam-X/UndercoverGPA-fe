@@ -68,7 +68,7 @@
 .drawer {
   position: fixed;
   top: 0;
-  left: -40%;
+  left: -100%;
   width: 40%;
   height: 100%;
   background-color: #ffffff;
