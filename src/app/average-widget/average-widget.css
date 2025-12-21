@@ -1,26 +1,49 @@
 .avg-circle {
   width: 200px;
   height: 200px;
-  margin: 0 auto 2rem;
   border-radius: 50%;
   backdrop-filter: blur(12px);
   background: rgba(255, 255, 255, 0.2);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
+.avg-content {
+  width: 67%;
+  height: 72%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.avg-subject {
+  font-size: clamp(0.2rem, 3vw, 4rem);
+  font-weight: 600;
+  line-height: 1.15;
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  hyphens: auto;
+}
+
 .avg-value {
-  font-size: 3.5rem;
-  font-weight: bold;
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
 }
 
 .avg-label {
-  margin-top: 0.25rem;
   font-size: 1rem;
-  color: #444;
+  opacity: 0.75;
 }
 
 .animate-pop {
@@ -67,8 +90,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 button {

@@ -1,9 +1,7 @@
 import { Component, OnInit, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-import { firstValueFrom } from "rxjs";
-import { IndexedDBStorageService } from "../services/indexeddb-storage.service";
-import { ApiService } from "../services/api.service";
+import { firstValueFrom } from "rxjs";import { ApiService } from "../services/api.service";
 import { PageCoreComponent } from "../page-core/page-core";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faSync } from "@fortawesome/free-solid-svg-icons";
@@ -43,7 +41,6 @@ export class ManageVotesComponent implements OnInit {
   refreshIcon = faSync;
 
   constructor(
-    private dbService: IndexedDBStorageService,
     private api: ApiService,
     private router: Router
   ) {}
@@ -67,19 +64,15 @@ export class ManageVotesComponent implements OnInit {
   async loadVotes() {
     try {
       // 1️⃣ Prova a prendere i voti dal server
-      const remoteVotes = await firstValueFrom(this.api.get<Vote[]>("votes")).catch(() => null);
+      const allVotes = await firstValueFrom(this.api.get<Vote[]>("votes")).catch(() => null);
 
-      if (remoteVotes && Array.isArray(remoteVotes)) {
-        this.votes = remoteVotes;
-        await this.dbService.setItem("votes", remoteVotes); // salva in IndexedDB
+      if (allVotes && Array.isArray(allVotes)) {
+        this.votes = allVotes;
         return;
       }
 
-      // 2️⃣ Se il server fallisce, prendi dalla IndexedDB
-      const storedVotes = await this.dbService.getItem<Vote[]>("votes").catch(() => null);
-
       // ✅ Forza sempre un array vuoto se null o non array
-      this.votes = Array.isArray(storedVotes) ? storedVotes : [];
+      this.votes = Array.isArray(allVotes) ? allVotes : [];
     } catch (err) {
       console.error("Errore caricamento voti:", err);
       this.votes = []; // fallback
@@ -96,11 +89,8 @@ export class ManageVotesComponent implements OnInit {
       await firstValueFrom(this.api.delete(`votes/${id}`));
 
       // Aggiorna la lista voti dal server
-      const remoteVotes = await firstValueFrom(this.api.get<Vote[]>("votes"));
-      this.votes = remoteVotes;
-
-      // Aggiorna IndexedDB
-      await this.dbService.setItem("votes", this.votes);
+      const allVotes = await firstValueFrom(this.api.get<Vote[]>("votes"));
+      this.votes = allVotes;
 
       // Alla fine chiudi la modale
       this.confirmDeleteId = null;
@@ -126,8 +116,8 @@ export class ManageVotesComponent implements OnInit {
   async syncWithMongo() {
     this.isRefreshingVotes = true;
     try {
-      const remoteVotes = await firstValueFrom(this.api.get<Vote[]>("votes"));
-      await this.dbService.setItem("votes", remoteVotes);
+      const allVotes = await firstValueFrom(this.api.get<Vote[]>("votes"));
+      this.votes = allVotes;
       await this.loadVotes();
     } catch (err) {
       console.error("Errore sincronizzazione:", err);

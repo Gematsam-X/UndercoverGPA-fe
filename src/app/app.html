@@ -1,4 +1,5 @@
-@if (connectingServerService.isConnecting$ | async) {<app-connecting-server>
-</app-connecting-server>
+@if (connectingServerService.isConnecting$ | async) {
+<app-connecting-server> </app-connecting-server>
 }
+<app-offline-modal></app-offline-modal>
 <router-outlet></router-outlet>

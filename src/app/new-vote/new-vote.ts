@@ -3,7 +3,6 @@ import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { HttpHeaders } from "@angular/common/http";
 import { PageCoreComponent } from "../page-core/page-core";
-import { IndexedDBStorageService } from "../services/indexeddb-storage.service";
 import { ApiService } from "../services/api.service";
 import { ActivatedRoute } from "@angular/router";
 
@@ -25,11 +24,7 @@ export class NewVote {
   isFormDisabled: boolean = false; // inizialmente abilitato
   title: string = "Nuovo voto";
 
-  constructor(
-    private api: ApiService,
-    private idbService: IndexedDBStorageService,
-    private route: ActivatedRoute
-  ) {
+  constructor(private api: ApiService, private route: ActivatedRoute) {
     const today = new Date();
     this.selectedDate = today.toISOString().split("T")[0];
     this.checkEditMode();
@@ -239,29 +234,6 @@ export class NewVote {
         this.voteMessageColor = "green";
         this.isSubmitting = false;
         this.buttonLabel = this.isEditMode ? "Modifica effettuata" : "Invia un altro voto";
-
-        // 🧠 Aggiornamento IndexedDB
-        try {
-          // Prendi tutti i voti, assicurandoti di avere sempre un array
-          let existingVotes = await this.idbService.getItem<any[]>("votes");
-          if (!Array.isArray(existingVotes)) existingVotes = []; // ✅ fallback se non esiste o non è array
-
-          if (this.isEditMode) {
-            const index = existingVotes.findIndex((v) => v._id === this.editingVoteId);
-            if (index !== -1) {
-              existingVotes[index] = savedVote.vote;
-            } else {
-              // se non trovi il voto da modificare, puoi decidere di aggiungerlo
-              existingVotes.push(savedVote.vote);
-            }
-          } else {
-            existingVotes.push(savedVote.vote);
-          }
-
-          await this.idbService.setItem("votes", existingVotes);
-        } catch (err) {
-          console.error("❌ Errore aggiornamento IndexedDB:", err);
-        }
       },
 
       error: (err) => {

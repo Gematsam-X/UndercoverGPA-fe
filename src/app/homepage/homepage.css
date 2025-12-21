@@ -1,24 +1,162 @@
-header h1 {
+/* CONTENITORE PRINCIPALE */
+.container {
+  padding: 2rem 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* BOTTONE DRAWER */
+.drawer-button {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+}
+
+/* HEADER */
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.header h1 {
   font-size: 2.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 
-header p {
-  margin-bottom: 0;
+.header p {
+  color: #6b7280;
+  margin: 0;
 }
 
-/* Personalizzazione bottone principale */
-.btn-primary {
+/* WIDGET */
+.average-widget {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+/* AZIONE */
+.action {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* BOTTONE PRINCIPALE */
+.primary-button {
   background-color: #1d4ed8;
+  color: white;
   border: none;
   border-radius: 0.5rem;
   padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
 }
 
-.btn-primary:hover {
+.primary-button:hover {
   background-color: #2563eb;
 }
 
-footer {
+/* FOOTER */
+.footer {
+  text-align: center;
+  margin-top: 3rem;
   font-size: 0.9rem;
+  color: #6b7280;
+}
+
+/* DRAWER */
+.drawer {
+  position: fixed;
+  top: 0;
+  left: -40%;
+  width: 40%;
+  height: 100%;
+  background-color: #ffffff;
+  box-shadow: 2px 0 15px rgba(0, 0, 0, 0.15);
+  transition: left 0.3s ease;
+  z-index: 1002;
+}
+
+.drawer.open {
+  left: 0;
+}
+
+/* HEADER DRAWER */
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+/* BODY DRAWER */
+.drawer-body {
+  padding: 1rem;
+}
+
+/* OVERLAY */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+}
+
+/* ITEM GENERICO DEL DRAWER */
+.drawer-item {
+  padding: 0.9rem 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  position: relative;
+  color: #1f2937;
+  font-size: 1rem;
+}
+
+/* Hover elegante */
+.drawer-item:hover {
+  background-color: #f1f5f9;
+}
+
+/* Separatore sotto */
+.drawer-item::after {
+  content: "";
+  position: absolute;
+  left: 0.6rem;
+  right: 0.6rem;
+  bottom: 0;
+  height: 1px;
+  background-color: #e5e7eb;
+}
+
+/* Ultimo elemento: niente separatore */
+.drawer-item:last-child::after {
+  display: none;
+}
+
+
+@media (max-width: 768px) {
+  /* Drawer largo 85% su mobile */
+  .drawer {
+    width: 85%;
+  }
+
+  /* Pulsanti più comodi al tocco */
+  .drawer-button {
+    padding: 0.6rem 0.9rem;
+    font-size: 1.1rem;
+  }
+
+  .close-btn {
+    font-size: 1.6rem;
+  }
 }

@@ -4,17 +4,29 @@ import { Injectable } from "@angular/core";
 export class AppHistoryService {
   private stack: string[] = [];
 
-  /** 
+  /**
+   * Normalizza il path rimuovendo:
+   * - query params (?a=1&b=2)
+   * - fragment (#qualcosa)
+   */
+  private normalizePath(path: string): string {
+    return path.split("?")[0].split("#")[0];
+  }
+
+  /**
    * Registra una pagina nella cronologia.
-   * Evita sequenze ripetitive tipo A-B-A-B.
+   * Evita duplicati e loop tipo A-B-A-B.
+   * Rimuove params e fragment.
    */
   push(path: string) {
+    const cleanPath = this.normalizePath(path);
+
     const last = this.stack[this.stack.length - 1];
     const secondLast = this.stack[this.stack.length - 2];
 
-    if (path === last || path === secondLast) return;
+    if (cleanPath === last || cleanPath === secondLast) return;
 
-    this.stack.push(path);
+    this.stack.push(cleanPath);
   }
 
   /**
@@ -24,9 +36,8 @@ export class AppHistoryService {
   goBack(defaultPath: string = "/home"): string {
     if (this.stack.length === 0) return defaultPath;
 
-    const current = this.stack.pop(); // rimuovo pagina attuale
+    const current = this.stack.pop();
 
-    // Copia temporanea della stack per non distruggerla troppo
     const tempStack: string[] = [];
     let previous: string | undefined;
 
@@ -36,12 +47,10 @@ export class AppHistoryService {
         previous = candidate;
         break;
       } else if (candidate) {
-        // tieni traccia dei percorsi scartati
         tempStack.unshift(candidate);
       }
     }
 
-    // Rimetti indietro i percorsi scartati
     this.stack.push(...tempStack);
 
     return previous || defaultPath;

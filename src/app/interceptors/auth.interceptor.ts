@@ -1,6 +1,6 @@
 import { inject } from "@angular/core";
 import { HttpRequest, HttpHandlerFn, HttpEvent, HttpInterceptorFn } from "@angular/common/http";
-import { Observable, from, throwError, BehaviorSubject, of } from "rxjs";
+import { Observable, from, throwError, BehaviorSubject } from "rxjs";
 import { catchError, switchMap, filter, take } from "rxjs/operators";
 import { AuthService } from "../services/auth.service";
 
@@ -15,10 +15,8 @@ export const authInterceptor: HttpInterceptorFn = (
 ): Observable<HttpEvent<any>> => {
   const auth = inject(AuthService);
 
-  // ⛔ non intercettare la richiesta di refresh
-  if (req.url.includes("/auth/token")) {
-    return next(req);
-  }
+  // ⛔ non intercettare la richiesta di refresh per non creare loop
+  if (req.url.includes("/auth/token")) return next(req);
 
   const token = auth.getToken();
 
@@ -31,10 +29,13 @@ export const authInterceptor: HttpInterceptorFn = (
 
   return next(authReq).pipe(
     catchError((err) => {
-      if (errorCodes.includes(err.status)) {
+      // Se la richiesta contiene "backup", non fai logout al 401
+      const isBackupRequest = req.url.includes("backup");
+
+      if (errorCodes.includes(err.status) && !isBackupRequest) {
         if (!isRefreshing) {
           isRefreshing = true;
-          refreshTokenSubject.next(null); // reset
+          refreshTokenSubject.next(null);
 
           return from(auth.refreshToken()).pipe(
             switchMap(() => {
@@ -60,9 +61,8 @@ export const authInterceptor: HttpInterceptorFn = (
             })
           );
         } else {
-          // 🚀 Se è già in corso un refresh, metti la richiesta in attesa
           return refreshTokenSubject.pipe(
-            filter((token) => token != null), // aspetta fino a che arriva il token nuovo
+            filter((token) => token != null),
             take(1),
             switchMap((newToken) => {
               const newReq = req.clone({
@@ -74,6 +74,7 @@ export const authInterceptor: HttpInterceptorFn = (
         }
       }
 
+      // Se è una richiesta backup, passa l'errore senza fare logout
       return throwError(() => err);
     })
   );

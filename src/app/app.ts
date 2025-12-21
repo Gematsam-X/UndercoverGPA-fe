@@ -5,11 +5,12 @@ import { AppHistoryService } from "./services/history.service";
 import { ConnectingServer } from "./connecting-server/connecting-server";
 import { ConnectingServerService } from "./services/connecting-server.service";
 import { AsyncPipe } from "@angular/common";
+import { OfflineModalComponent } from "./offline-modal/offline-modal";
 
 @Component({
   selector: "app-root",
   standalone: true,
-  imports: [RouterModule, FormsModule, ConnectingServer, AsyncPipe],
+  imports: [RouterModule, FormsModule, ConnectingServer, AsyncPipe, OfflineModalComponent],
   templateUrl: "./app.html",
   styleUrls: ["./app.css"],
 })

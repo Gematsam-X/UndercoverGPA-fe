@@ -1,0 +1,6 @@
+<page-core>
+  <div class="container">
+    @for (s of subjects(); track s) {
+    <app-average-widget [subject]="s" [votes]="votes()"> </app-average-widget>}
+  </div>
+</page-core>

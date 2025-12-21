@@ -1,9 +1,7 @@
 import { CommonModule } from "@angular/common";
-import { Component, computed, signal, OnInit, input } from "@angular/core";
-import { IndexedDBStorageService } from "../services/indexeddb-storage.service";
+import { Component, computed, signal, effect, input } from "@angular/core";
 import { ApiService } from "../services/api.service";
 import { firstValueFrom } from "rxjs";
-// Font Awesome
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faSync } from "@fortawesome/free-solid-svg-icons";
 
@@ -22,71 +20,86 @@ interface Vote {
   templateUrl: "./average-widget.html",
   styleUrls: ["./average-widget.css"],
 })
-export class AverageWidget implements OnInit {
-  private allVotes = signal<Vote[]>([]);
+export class AverageWidget {
+  // 🔹 INPUT OPZIONALI
   subject = input<string>("");
+  votes = input<Vote[] | null>(null);
+
+  // 🔹 STATO INTERNO
+  private allVotes = signal<Vote[]>([]);
+  private loadedFromServer = signal(false);
   isRefreshing = signal(false);
 
   faSync = faSync;
 
-  constructor(private db: IndexedDBStorageService, private api: ApiService) {}
+  constructor(private api: ApiService) {
+    effect(() => {
+      const incomingVotes = this.votes();
 
-  async ngOnInit() {
-    await this.loadVotes();
-  }
-
-  private async loadVotes() {
-    try {
-      let storedVotes = await this.db.getItem<Vote[]>("votes");
-
-      if (!Array.isArray(storedVotes) || storedVotes.length === 0) {
-        storedVotes = await firstValueFrom(this.api.get<Vote[]>("votes"));
-        await this.db.setItem("votes", storedVotes);
+      // 1️⃣ Se il parent passa i voti → hanno precedenza
+      if (Array.isArray(incomingVotes) && incomingVotes.length > 0) {
+        this.allVotes.set(incomingVotes);
+        this.loadedFromServer.set(false); // reset logico
+        return;
       }
 
-      this.allVotes.set(Array.isArray(storedVotes) ? storedVotes : []);
+      // 2️⃣ Se NON arrivano voti e NON ho ancora caricato dal server → fetch
+      if (!this.loadedFromServer()) {
+        this.loadFromServer();
+      }
+    });
+  }
+
+  // 🔹 caricamento iniziale server
+  private async loadFromServer() {
+    this.loadedFromServer.set(true);
+
+    try {
+      const serverVotes = await firstValueFrom(
+        this.api.get<Vote[]>("votes")
+      );
+
+      this.allVotes.set(Array.isArray(serverVotes) ? serverVotes : []);
     } catch (err) {
-      console.error("Errore durante il caricamento dei voti:", err);
+      console.error("Errore caricamento voti dal server:", err);
       this.allVotes.set([]);
     }
   }
 
+  // 🔹 refresh manuale
   async refreshVotes() {
-    this.isRefreshing.set(true); // 🔹 inizio loader
+    this.isRefreshing.set(true);
     try {
       const freshVotes = await firstValueFrom(
         this.api.get<Vote[]>("votes")
       );
-
-      if (Array.isArray(freshVotes)) {
-        this.allVotes.set(freshVotes);
-        await this.db.setItem("votes", freshVotes);
-        console.log("Voti aggiornati con successo dal server!");
-      }
+      this.allVotes.set(Array.isArray(freshVotes) ? freshVotes : []);
     } catch (err) {
-      console.error("Errore durante il refresh dei voti:", err);
+      console.error("Errore refresh voti:", err);
     } finally {
-      this.isRefreshing.set(false); // 🔹 fine loader
+      this.isRefreshing.set(false);
     }
   }
 
-  // 🔹 Calcolo della media (filtrando se serve)
+  // 🔹 media per materia
   average = computed(() => {
-    const all = this.allVotes() || [];
-    const subj = this.subject() || "";
+    const all = this.allVotes();
+    const subj = this.subject();
 
-    const filtered = subj ? all.filter((v) => v.subject === subj) : all;
+    const filtered = subj
+      ? all.filter(v => v.subject === subj)
+      : all;
 
-    if (!Array.isArray(filtered) || filtered.length === 0) return "ND";
+    if (filtered.length === 0) return "ND";
 
     const sum = filtered.reduce((acc, v) => acc + (v.value ?? 0), 0);
     return (sum / filtered.length).toFixed(2);
   });
 
-  // 🔹 Lista dei voti filtrati
+  // 🔹 voti filtrati
   filteredVotes = computed(() => {
-    const subj = this.subject() || "";
-    const all = this.allVotes() || [];
-    return Array.isArray(all) ? (subj ? all.filter((v) => v.subject === subj) : all) : [];
+    const subj = this.subject();
+    const all = this.allVotes();
+    return subj ? all.filter(v => v.subject === subj) : all;
   });
 }

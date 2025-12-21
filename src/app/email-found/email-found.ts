@@ -4,6 +4,8 @@ import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { Router } from "@angular/router";
 import { ApiService } from "../services/api.service";
+import { AuthService } from "../services/auth.service";
+import { finalize } from "rxjs";
 
 @Component({
   selector: "app-email-found",
@@ -12,10 +14,10 @@ import { ApiService } from "../services/api.service";
   templateUrl: "./email-found.html",
 })
 export class EmailFound implements OnInit {
-  email = localStorage.getItem("userEmail") || ""; // prende l'email da localStorage
-  password = "";
+  email: string = localStorage.getItem("userEmail") || ""; // prende l'email da localStorage
+  password: string = "";
 
-  constructor(private api: ApiService, private router: Router) {}
+  constructor(private router: Router, private auth: AuthService) {}
 
   ngOnInit() {
     if (!this.email) {
@@ -26,32 +28,22 @@ export class EmailFound implements OnInit {
 
   onLogin() {
     if (!this.password) return alert("Inserisci la password!");
-
-    // chiama il backend per login con JWT
-    this.api
-      .post<{
-        message: string;
-        accessToken: string;
-        username: string;
-      }>(
-        "auth/login",
-        {
-          email: this.email,
-          password: this.password,
-        }
+    // chiama il backend per login
+    this.auth
+      .login(this.email, this.password)
+      .pipe(
+        finalize(() => {
+          localStorage.removeItem("userEmail");
+        })
       )
       .subscribe({
         next: (res) => {
-          localStorage.setItem("accessToken", res.accessToken);
-          localStorage.setItem("username", res.username);
-
-          alert(res.message + " 👌 Benvenuto " + res.username);
-
+          // Login riuscito, reindirizza a home
           this.router.navigate(["home"]);
         },
         error: (err) => {
           console.error(err);
-          alert(err.error?.error || "Errore server o credenziali errate!");
+          alert("Errore di login! Controlla le credenziali.");
         },
       });
   }

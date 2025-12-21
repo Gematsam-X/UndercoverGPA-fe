@@ -4,24 +4,20 @@ import { environment } from "../../environments/environment";
 import { Observable } from "rxjs";
 import { finalize } from "rxjs/operators";
 import { ConnectingServerService } from "../services/connecting-server.service";
-
 @Injectable({
   providedIn: "root",
 })
 export class ApiService {
   private baseUrl = environment.apiUrl;
 
-  constructor(
-    private http: HttpClient,
-    private connectingService: ConnectingServerService
-  ) {}
+  constructor(private http: HttpClient, private connectingService: ConnectingServerService) {}
 
   private withPendingCheck<T>(obs: Observable<T>): Observable<T> {
     let finished = false;
 
     const timer = setTimeout(() => {
       if (!finished) {
-        this.connectingService.show();  // 👈 mostra il component
+        this.connectingService.show();
       }
     }, 1500);
 
@@ -29,7 +25,7 @@ export class ApiService {
       finalize(() => {
         finished = true;
         clearTimeout(timer);
-        this.connectingService.hide(); // 👈 nascondi quando finisce
+        this.connectingService.hide();
       })
     );
   }

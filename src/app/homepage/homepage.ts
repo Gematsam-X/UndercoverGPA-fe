@@ -4,7 +4,7 @@ import { RouterModule, Router } from "@angular/router";
 import { PageCoreComponent } from "../page-core/page-core";
 import { AverageWidget } from "../average-widget/average-widget";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { faBars, faBurger, faHamburger } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faChartColumn, faUser } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: "app-homepage",
@@ -15,6 +15,10 @@ import { faBars, faBurger, faHamburger } from "@fortawesome/free-solid-svg-icons
 })
 export class Homepage {
   drawerIcon = faBars;
+  drawerOpen = false;
+  accountIcon = faUser;
+
+  individualAveragesIcon = faChartColumn;
 
   constructor(private router: Router) {}
 
@@ -22,6 +26,18 @@ export class Homepage {
 
   redirectToNewVoteForm() {
     this.router.navigate(["new-vote"]);
+  }
+
+  toggleDrawer() {
+    this.drawerOpen = !this.drawerOpen;
+  }
+
+  onViewIndividualAverages() {
+    this.router.navigate(["individual-averages"]);
+  }
+
+  toProfile() {
+    this.router.navigate(["account-page"]);
   }
 
   logout() {

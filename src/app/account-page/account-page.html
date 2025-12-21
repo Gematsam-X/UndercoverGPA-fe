@@ -1,0 +1,46 @@
+<page-core>
+  <h1>Impostazioni account - NotableBiblePoints</h1>
+  <h1>{{ username }}</h1>
+
+  <div class="actions-row">
+    <!-- LOGOUT -->
+    <div class="action" (click)="logout()">
+      <div class="img-container"><fa-icon [icon]="logoutIcon"></fa-icon></div>
+      <div class="text-container">
+        <h2>Logout</h2>
+        <h3>Esci dal tuo account. I tuoi dati non verranno eliminati, ma dovrai effettuare di nuovo il login.</h3>
+      </div>
+    </div>
+
+    <!-- DELETE ACCOUNT -->
+    <div class="action" (click)="deleteAccount()">
+      <div class="img-container"><fa-icon [icon]="deleteAccountIcon"></fa-icon></div>
+      <div class="text-container">
+        <h2>Elimina account</h2>
+        <h3>Elimina per sempre il tuo account e tutti i dati associati.</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions-row">
+    <!-- CREATE BACKUP -->
+    <div class="action" (click)="createBackup()">
+      <div class="img-container"><fa-icon [icon]="createBackupIcon"></fa-icon></div>
+      <div class="text-container">
+        <h2>Crea un backup</h2>
+        <h3>Esporta tutte le tue note attuali per usarle su altri dispositivi.</h3>
+      </div>
+    </div>
+
+    <!-- RESTORE BACKUP -->
+    <div class="action" (click)="triggerRestoreFileInput()">
+      <div class="img-container"><fa-icon [icon]="restoreBackupIcon"></fa-icon></div>
+      <div class="text-container">
+        <h2>Importa un backup</h2>
+        <h3>Importa le note salvate in precedenza. Scegli se rimpiazzare o unire i tuoi voti.</h3>
+      </div>
+      <!-- input file nascosto -->
+      <input type="file" accept=".json" hidden #restoreInput (change)="restoreBackup($event)" />
+    </div>
+  </div>
+</page-core>

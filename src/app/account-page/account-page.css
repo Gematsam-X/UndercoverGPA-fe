@@ -1,0 +1,90 @@
+.action {
+  display: flex;
+  align-items: stretch;
+  gap: 1.25rem;
+
+  width: 100%;
+  min-height: 20vh;
+  padding: 1.5rem;
+
+  border-style: dotted;
+  border-radius: 1.25rem;
+
+  cursor: pointer;
+  word-break: break-word;
+
+  /* micro-wow */
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+/* Effetto hover gentile, non aggressivo (non è Windows 👀) */
+.action:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* Contenitore immagine */
+.action .img-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+}
+
+/* Icona / emoji gigante ma disciplinata */
+.action fa-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: clamp(4rem, 10vw, 8rem);
+  width: 8rem;
+  height: 8rem;
+
+  user-select: none;
+}
+
+/* Testo */
+.action .text-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.75rem;
+
+  flex-grow: 1;
+}
+
+/* Riga delle action */
+.actions-row {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 2rem;
+
+  margin-bottom: 2rem;
+}
+
+/* Tablet e mobile */
+@media (max-width: 768px) {
+  .actions-row {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* Mobile piccolo */
+@media (max-width: 600px) {
+  .action {
+    max-width: 92%;
+  }
+}
+
+/* Tablet medio */
+@media (min-width: 601px) and (max-width: 900px) {
+  .action {
+    max-width: 85%;
+  }
+}

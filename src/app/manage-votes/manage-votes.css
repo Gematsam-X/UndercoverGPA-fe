@@ -130,9 +130,15 @@
 }
 
 .vote-label {
+  max-width: 80%;              /* 👈 meno del diametro del cerchio */
   font-size: 0.75rem;
   text-align: center;
+
+  white-space: nowrap;         /* ❌ niente a capo */
+  overflow: hidden;            /* ✂️ taglia */
+  text-overflow: ellipsis;     /* … */
 }
+
 
 .vote-value {
   font-size: 1.2rem;
