@@ -73,7 +73,7 @@
   height: 100%;
   background-color: #ffffff;
   box-shadow: 2px 0 15px rgba(0, 0, 0, 0.15);
-  transition: left 0.3s ease;
+  transition: left 0.4s ease;
   z-index: 1002;
 }
 
