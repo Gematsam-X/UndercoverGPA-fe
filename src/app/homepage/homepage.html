@@ -39,12 +39,25 @@
           <fa-icon [icon]="individualAveragesIcon"></fa-icon>
           <p>Visualizza le medie per singole materie</p>
         </div>
+        <div class="drawer-item">
+          <label for="switch">Chiaro</label
+          ><label class="switch">
+            <input
+              type="checkbox"
+              [checked]="theme.theme$ | async"
+              (change)="theme.toggleTheme()"
+              id="switch"
+            />
+            <span class="slider-switch"></span>
+          </label>
+          <label for="switch">Scuro</label>
+        </div>
       </div>
     </div>
 
     <!-- OVERLAY -->
     @if (drawerOpen) {
-    <div class="overlay" (click)="toggleDrawer()"></div>
+      <div class="overlay" (click)="toggleDrawer()"></div>
     }
   </div>
 </page-core>

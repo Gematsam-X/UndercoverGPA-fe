@@ -1,9 +1,10 @@
-import { Component, Input } from "@angular/core";
+import { Component, HostBinding, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { Router } from "@angular/router";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faHome, faPlus, faArrowLeft, faChartBar } from "@fortawesome/free-solid-svg-icons";
 import { AppHistoryService } from "../services/history.service";
+import { ThemeService } from "../services/theme.service";
 
 @Component({
   selector: "page-core",
@@ -24,7 +25,11 @@ export class PageCoreComponent {
   faBack = faArrowLeft;
   faManageVotes = faChartBar;
 
-  constructor(private router: Router, private history: AppHistoryService) {}
+  constructor(
+    private router: Router,
+    private history: AppHistoryService,
+    private theme: ThemeService
+  ) {}
 
   goHome() {
     this.router.navigate(["/home"]); // Torna alla home
@@ -41,5 +46,10 @@ export class PageCoreComponent {
 
   goToManageVotes() {
     this.router.navigate(["/manage-votes"]); // Vai alla pagina "gestisci voti"
+  }
+
+  @HostBinding("class.dark-theme")
+  get isDark() {
+    return this.theme.isDark();
   }
 }

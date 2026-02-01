@@ -1,0 +1,27 @@
+:root {
+  --avg-widget-bg: #f0f0f5;
+  --text-color: #2c2c2c;
+  --primary-color: #4f46e5; /* viola-blu elegante */
+  --accent-color: #22d3ee; /* azzurro acceso */
+  --card-bg: #ffffff;
+  --border-radius: 14px;
+  --shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  --transition: all 0.3s ease;
+  --homepage-button-text: #f4f4f9;
+  --background-color: #f4f4f9;
+  --input-bg: #ffffff;
+}
+
+.dark-theme {
+  --avg-widget-bg: #434549;
+  --text-color: #f4f4f9;
+  --primary-color: #6841d3;
+  --accent-color: #06b6d4;
+  --card-bg: #2d3748;
+  --border-radius: 14px;
+  --shadow: 0 4px 14px rgba(0, 0, 0, 0.4); /* ombra più evidente */
+  --transition: all 0.3s ease;
+  --homepage-button-text: #2c2c2c;
+  --background-color: #2c2c2c;
+  --input-bg: #3a3a3f;
+}

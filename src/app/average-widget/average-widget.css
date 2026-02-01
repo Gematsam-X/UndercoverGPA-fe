@@ -3,47 +3,53 @@
   height: 200px;
   border-radius: 50%;
   backdrop-filter: blur(12px);
-  background: rgba(255, 255, 255, 0.2);
+  background-color: var(--avg-widget-bg);
+  color: var(--text-color);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .avg-content {
-  width: 67%;
-  height: 72%;
+  width: 70%;
+  height: 80%;
+  padding: 0.5rem;
+  box-sizing: border-box;
 
   display: flex;
   flex-direction: column;
+  justify-content: center; /* inizia dall’alto */
   align-items: center;
-  justify-content: center;
-
   text-align: center;
+  position: relative;
+}
+
+/* Se ESISTE il nome della materia → allinea in alto */
+.avg-content:has(.avg-subject:not(:empty)) {
+  justify-content: flex-start;
 }
 
 .avg-subject {
-  font-size: clamp(0.2rem, 3vw, 4rem);
-  font-weight: 600;
-  line-height: 1.15;
-  display: -webkit-box;
-  line-clamp: 2;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  text-align: center;
+  white-space: nowrap; /* evita a capo lettera per lettera */
   overflow: hidden;
-  hyphens: auto;
+  text-overflow: ellipsis;
+  flex-shrink: 0; /* non comprimere */
+  margin-bottom: 0.2rem;
 }
 
 .avg-value {
   font-size: 3rem;
   font-weight: 700;
   line-height: 1;
+  margin-bottom: 10px;
 }
 
 .avg-label {
   font-size: 1rem;
   opacity: 0.75;
+  margin-bottom: 10px;
 }
 
 .animate-pop {
@@ -71,16 +77,11 @@
   font-size: 1rem;
   border-radius: 8px;
   border: none;
-  background: #000;
   cursor: pointer;
   transition: background 0.3s;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.refresh-btn:hover:not(:disabled) {
-  background: #000;
 }
 
 /* Spinner per icona Font Awesome */
@@ -103,4 +104,6 @@ button {
   border: none;
   background: none;
   cursor: pointer;
+  background-color: var(--text-color);
+  color: var(--background-color);
 }

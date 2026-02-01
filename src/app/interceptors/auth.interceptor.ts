@@ -4,7 +4,7 @@ import { Observable, from, throwError, BehaviorSubject } from "rxjs";
 import { catchError, switchMap, filter, take } from "rxjs/operators";
 import { AuthService } from "../services/auth.service";
 
-const errorCodes: number[] = [400, 401, 402, 403];
+const errorCodes: number[] = [400, 401, 403];
 
 let isRefreshing = false;
 const refreshTokenSubject = new BehaviorSubject<string | null>(null);

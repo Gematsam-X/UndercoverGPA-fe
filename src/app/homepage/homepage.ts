@@ -1,10 +1,12 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterModule, Router } from "@angular/router";
 import { PageCoreComponent } from "../page-core/page-core";
 import { AverageWidget } from "../average-widget/average-widget";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faBars, faChartColumn, faUser } from "@fortawesome/free-solid-svg-icons";
+import { Observable } from "rxjs";
+import { ThemeService } from "../services/theme.service";
 
 @Component({
   selector: "app-homepage",
@@ -20,8 +22,7 @@ export class Homepage {
 
   individualAveragesIcon = faChartColumn;
 
-  constructor(private router: Router) {}
-
+  constructor(private router: Router, public theme: ThemeService) {}
   username = localStorage.getItem("username") || "utente";
 
   redirectToNewVoteForm() {
@@ -38,13 +39,5 @@ export class Homepage {
 
   toProfile() {
     this.router.navigate(["account-page"]);
-  }
-
-  logout() {
-    console.log("Logging out user.");
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("username");
-    localStorage.removeItem("userEmail");
-    this.router.navigate(["login"]);
   }
 }

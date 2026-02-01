@@ -210,3 +210,10 @@
   cursor: pointer;
   padding: 0; /* niente padding extra */
 }
+
+.modal-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}

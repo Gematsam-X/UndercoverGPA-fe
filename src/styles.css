@@ -1,35 +1,17 @@
-/* ===============================
-   🎨 Stile generale dell'app
-   =============================== */
-:root {
-  --primary-color: #4f46e5; /* viola-blu elegante */
-  --accent-color: #22d3ee; /* azzurro acceso */
-  --background-color: #f8fafc;
-  --card-bg: #ffffff;
-  --text-color: #1e293b;
-  --border-radius: 14px;
-  --shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-  --transition: all 0.3s ease;
-}
-
-.dark-theme {
-  --primary-color: #8b5cf6;
-  --accent-color: #06b6d4;
-  --background-color: #1e293b; /* blu-grigio scuro */
-  --card-bg: #2d3748; 
-  --text-color: #f8fafc;
-  --border-radius: 14px; 
-  --shadow: 0 4px 14px rgba(0, 0, 0, 0.4); /* ombra più evidente */
-  --transition: all 0.3s ease;
-}
-
-html,
 body {
   height: 100%;
   margin: 0;
   font-family: "Poppins", "Segoe UI", sans-serif;
-  background: var(--background-color);
   color: var(--text-color);
+}
+
+body {
+  background-color: var(--background-color);
+  height: 100%;
+  margin: 0;
+  font-family: "Poppins", "Segoe UI", sans-serif;
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
 }
 
 /* ===============================
