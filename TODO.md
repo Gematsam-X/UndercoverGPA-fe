@@ -1,5 +1,6 @@
 - [x] Init the app
 - [x] Use IndexedDB for future offline storage implementation
 - [x] Init the homepage
-- [ ] Add a component displaying the single subject average grade
-- [ ] Add a dark theme
+- [x] Add a component displaying the single subject average grade
+- [x] Add a dark theme
+- [ ] Add a graphic displaying averages through the first four months, the last four months, and the whole scholastic year.
