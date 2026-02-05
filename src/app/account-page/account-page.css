@@ -57,6 +57,11 @@
   flex-grow: 1;
 }
 
+.action .text-container * {
+    color: var(--text-color) !important;
+}
+
+
 /* Riga delle action */
 .actions-row {
   display: flex;

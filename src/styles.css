@@ -39,7 +39,7 @@ h1,
 h2,
 h3 {
   font-weight: 600;
-  color: var(--primary-color);
+  color: var(--titles-color);
   letter-spacing: 0.5px;
 }
 

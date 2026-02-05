@@ -1,63 +1,65 @@
 <page-core [showBackButton]="false" [showHomeButton]="false">
-  <div class="container">
-    <!-- BOTTONE DRAWER FISSO -->
-    <button class="drawer-button" type="button" (click)="toggleDrawer()">
-      <fa-icon [icon]="drawerIcon"></fa-icon>
-    </button>
-
-    <!-- HEADER CENTRATO -->
-    <header class="header">
-      <h1>UndercoverGPA</h1>
-      <p>Benvenuto, {{ username }}</p>
-    </header>
-
-    <!-- WIDGET MEDIA -->
-    <app-average-widget class="average-widget"></app-average-widget>
-
-    <!-- BOTTONE NUOVO VOTO -->
-    <div class="action">
-      <button class="primary-button" (click)="redirectToNewVoteForm()">
-        Registra un nuovo voto
+  <main class="page">
+    <div class="container">
+      <!-- BOTTONE DRAWER FISSO -->
+      <button class="drawer-button" type="button" (click)="toggleDrawer()">
+        <fa-icon [icon]="drawerIcon"></fa-icon>
       </button>
-    </div>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-      <p>&copy; 2025 Gionatan Venturi - Gematsam X. Tutti i diritti riservati.</p>
-    </footer>
+      <!-- HEADER CENTRATO -->
+      <header class="header">
+        <h1>UndercoverGPA</h1>
+        <p>Benvenuto, {{ username }}</p>
+      </header>
 
-    <!-- DRAWER -->
-    <!-- IL PROFILO VA IN CIMA COME LE APP VERE :)-->
-    <div class="drawer" [class.open]="drawerOpen">
-      <div class="drawer-header">
-        <div class="drawer-item" (click)="toProfile()">Profilo</div>
-        <button class="close-btn" (click)="toggleDrawer()">✕</button>
+      <!-- WIDGET MEDIA -->
+      <app-average-widget class="average-widget"></app-average-widget>
+
+      <!-- BOTTONE NUOVO VOTO -->
+      <div class="action">
+        <button class="primary-button" (click)="redirectToNewVoteForm()">
+          Registra un nuovo voto
+        </button>
       </div>
 
-      <div class="drawer-body">
-        <div class="drawer-item" (click)="onViewIndividualAverages()">
-          <fa-icon [icon]="individualAveragesIcon"></fa-icon>
-          <p>Visualizza le medie per singole materie</p>
+      <!-- FOOTER -->
+      <footer class="footer">
+        <p>&copy; 2025 Gionatan Venturi - Gematsam X. Tutti i diritti riservati.</p>
+      </footer>
+
+      <!-- DRAWER -->
+      <!-- IL PROFILO VA IN CIMA COME LE APP VERE :)-->
+      <div class="drawer" [class.open]="drawerOpen">
+        <div class="drawer-header">
+          <div class="drawer-item" (click)="toProfile()">Profilo</div>
+          <button class="close-btn" (click)="toggleDrawer()">✕</button>
         </div>
-        <div class="drawer-item">
-          <label for="switch">Chiaro</label
-          ><label class="switch">
-            <input
-              type="checkbox"
-              [checked]="theme.theme$ | async"
-              (change)="theme.toggleTheme()"
-              id="switch"
-            />
-            <span class="slider-switch"></span>
-          </label>
-          <label for="switch">Scuro</label>
+
+        <div class="drawer-body">
+          <div class="drawer-item" (click)="onViewIndividualAverages()">
+            <fa-icon [icon]="individualAveragesIcon"></fa-icon>
+            <p>Visualizza le medie per singole materie</p>
+          </div>
+          <div class="drawer-item">
+            <label for="switch">Chiaro</label
+            ><label class="switch">
+              <input
+                type="checkbox"
+                [checked]="theme.theme$ | async"
+                (change)="theme.toggleTheme()"
+                id="switch"
+              />
+              <span class="slider-switch"></span>
+            </label>
+            <label for="switch">Scuro</label>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- OVERLAY -->
-    @if (drawerOpen) {
-      <div class="overlay" (click)="toggleDrawer()"></div>
-    }
-  </div>
+      <!-- OVERLAY -->
+      @if (drawerOpen) {
+        <div class="overlay" (click)="toggleDrawer()"></div>
+      }
+    </div>
+  </main>
 </page-core>

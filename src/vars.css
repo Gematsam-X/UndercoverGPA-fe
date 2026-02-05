@@ -2,6 +2,7 @@
   --avg-widget-bg: #f0f0f5;
   --text-color: #2c2c2c;
   --primary-color: #4f46e5; /* viola-blu elegante */
+  --titles-color: #4f46e5;
   --accent-color: #22d3ee; /* azzurro acceso */
   --card-bg: #ffffff;
   --border-radius: 14px;
@@ -15,7 +16,8 @@
 .dark-theme {
   --avg-widget-bg: #434549;
   --text-color: #f4f4f9;
-  --primary-color: #6841d3;
+  --primary-color: #7760b6;
+  --titles-color: rgb(158, 95, 241);
   --accent-color: #06b6d4;
   --card-bg: #2d3748;
   --border-radius: 14px;
