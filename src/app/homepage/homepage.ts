@@ -5,7 +5,6 @@ import { PageCoreComponent } from "../page-core/page-core";
 import { AverageWidget } from "../average-widget/average-widget";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faBars, faChartColumn, faUser } from "@fortawesome/free-solid-svg-icons";
-import { Observable } from "rxjs";
 import { ThemeService } from "../services/theme.service";
 
 @Component({

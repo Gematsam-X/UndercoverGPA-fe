@@ -31,16 +31,19 @@
       <!-- IL PROFILO VA IN CIMA COME LE APP VERE :)-->
       <div class="drawer" [class.open]="drawerOpen">
         <div class="drawer-header">
-          <div class="drawer-item" (click)="toProfile()">Profilo</div>
           <button class="close-btn" (click)="toggleDrawer()">✕</button>
         </div>
 
         <div class="drawer-body">
+          <div class="drawer-item" (click)="toProfile()">
+            <fa-icon [icon]="accountIcon"></fa-icon>Impostazioni del profilo per {{ username }}
+          </div>
           <div class="drawer-item" (click)="onViewIndividualAverages()">
             <fa-icon [icon]="individualAveragesIcon"></fa-icon>
             <p>Visualizza le medie per singole materie</p>
           </div>
           <div class="drawer-item">
+            <p>Tema:</p>
             <label for="switch">Chiaro</label
             ><label class="switch">
               <input
