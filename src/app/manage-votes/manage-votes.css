@@ -1,19 +1,13 @@
-:root {
-  --color-yellow: #facc15;
-  --color-red: #ef4444;
-  --color-green: #22c55e;
-}
-
 .vote-red {
-  background-color: var(--color-red);
+  background-color: #ef4444;
 }
 
 .vote-yellow {
-  background-color: var(--color-yellow);
+  background-color: #facc15;
 }
 
 .vote-green {
-  background-color: var(--color-green);
+  background-color: #22c55e;
 }
 
 /* ===============================
@@ -30,7 +24,7 @@
 
 .mv-header h1 {
   font-size: 1.8rem;
-  color: var(--primary-color);
+  color: var(--titles-color);
   text-align: center;
 }
 
@@ -89,17 +83,13 @@
   transition: 0.3s;
 }
 
-.mv-sort-buttons button:hover {
-  background-color: #3730a3;
-}
-
 .mv-sort-buttons span {
   margin-left: 0.3rem;
   font-size: 0.8rem;
 }
 
 /* ===============================
-   🔹 Tabella voti → trasformata in bubbles
+   🔹 Ogni voto -> una bubble
    =============================== */
 .mv-table-wrapper {
   display: flex;
@@ -120,7 +110,9 @@
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
   position: relative;
 }
 
@@ -130,15 +122,14 @@
 }
 
 .vote-label {
-  max-width: 80%;              /* 👈 meno del diametro del cerchio */
+  max-width: 80%; /* 👈 meno del diametro del cerchio */
   font-size: 0.75rem;
   text-align: center;
 
-  white-space: nowrap;         /* ❌ niente a capo */
-  overflow: hidden;            /* ✂️ taglia */
-  text-overflow: ellipsis;     /* … */
+  white-space: nowrap; /* ❌ niente a capo */
+  overflow: hidden; /* ✂️ taglia */
+  text-overflow: ellipsis; /* ➕ aggiungi "..." se troppo lungo */
 }
-
 
 .vote-value {
   font-size: 1.2rem;
@@ -216,4 +207,8 @@
   display: flex;
   justify-content: center;
   gap: 0.5rem;
+}
+
+p {
+  color: var(--text-color);
 }
